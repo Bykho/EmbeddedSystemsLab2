@@ -44,7 +44,7 @@ void *network_thread_f(void *);
 // ADDING FUNCTIONS HERE
 
 #define TOTAL_COLS 64
-#define SEPARATOR_ROW 13
+#define SEPARATOR_ROW 15
 
 
 void draw_separator() {
@@ -115,6 +115,9 @@ int main()
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
+
+
+
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
