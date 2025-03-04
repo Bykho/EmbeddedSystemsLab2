@@ -44,7 +44,7 @@ void *network_thread_f(void *);
 // ADDING FUNCTIONS HERE
 
 #define TOTAL_COLS 64
-#define SEPARATOR_ROW 20
+#define SEPARATOR_ROW 17
 
 
 void draw_separator() {
@@ -76,7 +76,7 @@ int main()
     fbputchar('*', 23, col);
   }
 
-  fbputs("Hello CSEE 4840 World!", 4, 10);
+  fbputs("Lab 2 Chat Server", 4, 10);
   
   draw_separator();
   
@@ -145,7 +145,8 @@ void *network_thread_f(void *ignored)
   //Current line should do something like 
   //allow us to choose where the messages get written to.
   int current_line = 8;
-  /* Receive data */
+
+  //IN THIS WHILE LOOP WE ARE RECIEVING DATA
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     //check if were at the bottom, is yes clear the whole recieved text
     if(current_line > SEPARATOR_ROW - 1) {
