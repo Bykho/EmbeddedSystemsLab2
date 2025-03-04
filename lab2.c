@@ -44,7 +44,7 @@ void *network_thread_f(void *);
 // ADDING FUNCTIONS HERE
 
 #define TOTAL_COLS 64
-#define SEPARATOR_ROW 21
+#define SEPARATOR_ROW 20
 
 
 void draw_separator() {
@@ -119,7 +119,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate);
-      fbputs(keystate, 22, 0);
+      fbputs(keystate, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
@@ -142,10 +142,27 @@ void *network_thread_f(void *ignored)
   /* Receive data */
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     recvBuf[n] = '\0';
-    printf("%s", recvBuf);
-    fbputs(recvBuf, 8, 0);
-  }
 
+    //NICO PUSHED HERE: WE ARE GOING TO TRY TO WRAP LONG MESSAGES
+    int line_length = 0;
+    char *token = strtok(recvBuf, "\n");
+    while (token != NULL) {
+      line_length = strlen(token);
+      if (line_length > TOTAL_COLS) {
+        for (int i = 0; i < line_length; i += TOTAL_COLS) {
+          char line[TOTAL_COLS + 1];
+          strncpy(line, token + i, TOTAL_COLS);
+          line[TOTAL_COLS] = '\0';
+          printf("%s\n", line);
+          fbputs(line, 8 + (i / TOTAL_COLS), 0);
+        }
+      } else {
+        printf("%s\n", token);
+        fbputs(token, 8, 0);
+      }
+      token = strtok(NULL, "\n");
+    }
+  }
   return NULL;
 }
 
