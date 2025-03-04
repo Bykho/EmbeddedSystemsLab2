@@ -127,6 +127,7 @@ void *network_thread_f(void *ignored)
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
     fbputs(recvBuf, 8, 0);
+    fbputs(recvBuf, 0, 0);
   }
 
   return NULL;
