@@ -135,31 +135,43 @@ int main()
   return 0;
 }
 
+//NICO PUSHED HERE
+//HERE IS WHERE WE WRITE THE CODE THAT SHOULD MANAGE INCOMING TRAFFIC AND DISPLAY IN TOP PORTION
+
 void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
+  //Current line should do something like 
+  //allow us to choose where the messages get written to.
+  int current_line = 8;
   /* Receive data */
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
     recvBuf[n] = '\0';
 
-    //NICO PUSHED HERE: WE ARE GOING TO TRY TO WRAP LONG MESSAGES
+    // Initialize line_length to 0 and tokenize the received buffer by newline characters
     int line_length = 0;
     char *token = strtok(recvBuf, "\n");
     while (token != NULL) {
+      // Calculate the length of the current line (which is the token)
       line_length = strlen(token);
+      // If the line is longer than the total columns, wrap it so we dont go passed the right barrier of the screen
       if (line_length > TOTAL_COLS) {
         for (int i = 0; i < line_length; i += TOTAL_COLS) {
           char line[TOTAL_COLS + 1];
+          // Copy a chunk of the line into a temporary buffer
           strncpy(line, token + i, TOTAL_COLS);
           line[TOTAL_COLS] = '\0';
+          // Print and display the wrapped line
           printf("%s\n", line);
-          fbputs(line, 8 + (i / TOTAL_COLS), 0);
+          fbputs(line, current_line++, 0);
         }
       } else {
+        // If the line is not too long, just go ahead and print it direct
         printf("%s\n", token);
-        fbputs(token, 8, 0);
+        fbputs(token, current_line++, 0);
       }
+      // Move to the next line
       token = strtok(NULL, "\n");
     }
   }
