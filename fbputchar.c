@@ -26,7 +26,7 @@
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
 #define TOTAL_COLS 64
-#define SEPARATOR_ROW 21
+#define TOTAL_ROWS 21
 // define boundaries for the top and bottom sections
 
 struct fb_var_screeninfo fb_vinfo;
