@@ -40,6 +40,21 @@ uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
+
+// ADDING FUNCTIONS HERE
+
+#define TOTAL_COLS 64
+#define SEPARATOR_ROW 21
+
+
+void draw_separator() {
+  for (int col = 0; col < TOTAL_COLS; col++) {
+    fbputchar('-', SEPARATOR_ROW, col);
+    }
+}
+
+
+
 int main()
 {
   int err, col;
@@ -62,7 +77,9 @@ int main()
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
-
+  
+  draw_separator();
+  
   /* Open the keyboard */
   if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
     fprintf(stderr, "Did not find a keyboard\n");
