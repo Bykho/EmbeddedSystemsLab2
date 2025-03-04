@@ -151,7 +151,9 @@ void *network_thread_f(void *ignored)
     if(current_line > SEPARATOR_ROW - 1) {
       current_line = 8;
       for(int i = 8; i < SEPARATOR_ROW; i++) {
-        fbputs("CLEAR EVERYTHING", i, 0); // Clear the line
+        for(int j = 0; j < TOTAL_COLS; j++) {
+          fbputs(" ", i, j);
+        }
       }
     }
 
