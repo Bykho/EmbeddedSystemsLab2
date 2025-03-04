@@ -147,9 +147,17 @@ void *network_thread_f(void *ignored)
   int current_line = 8;
   /* Receive data */
   while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
+    //check if were at the bottom, is yes clear the whole recieved text
+    if(current_line > SEPARATOR_ROW - 1) {
+      current_line = 8;
+      for(int i = 8; i < SEPARATOR_ROW; i++) {
+        fbputs("CLEAR EVERYTHING", i, 0); // Clear the line
+      }
+    }
+
     recvBuf[n] = '\0';
 
-    // Initialize line_length to 0 and tokenize the received buffer by newline characters
+    // Initialize line_length to 0 and tokenize the received buffer by newline characters so that we go down by lines if we have that
     int line_length = 0;
     char *token = strtok(recvBuf, "\n");
     while (token != NULL) {
