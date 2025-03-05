@@ -134,6 +134,7 @@ int main()
   // On enter send array to server.
 
   char textBuffer[2][64] = {0};
+  textBuffer[1][1]=1;
   int rows = 2;
   int cols = 64;
   int currentRow = 0;
