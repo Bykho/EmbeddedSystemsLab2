@@ -60,7 +60,7 @@ char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   } else {
     uppercase = 0;
   }
-  char *l;
+  char *l = NULL;
   if (uppercase) {
     *l = (char)(61 + keycode0);
   } else {
