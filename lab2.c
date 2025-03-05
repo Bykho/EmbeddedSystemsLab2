@@ -169,8 +169,8 @@ int main()
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
           printf("%c", textBuffer[i][j]);
-          printf("\n");
         }
+        printf("\n");
       }
       fbputs(&l, currentRow, currentCol++);
 
