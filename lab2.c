@@ -171,7 +171,7 @@ int main()
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow-21][currentCol] = l;
         fbputs(&l, currentRow, currentCol++);
-        currentCol++;
+        //currentCol++;
       }
 
       printf("about to print textBuffer: \n");
