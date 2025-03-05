@@ -143,7 +143,8 @@ int main()
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
 
-  textBuffer[1][1] = 'C';
+  //textBuffer[1][1] = 'C';
+  char l;
 
   /* Look for and handle keypresses */
   for (;;) {
@@ -171,7 +172,7 @@ int main()
         if (currentRow>22) {
           currentRow = 21;
         }
-        char l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow-21][currentCol] = l;
       }
       fbputs(&l, currentRow, currentCol++);
