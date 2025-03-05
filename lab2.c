@@ -147,7 +147,7 @@ int main()
   /* Look for and handle keypresses */
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
-    char tmp = textBuffer[currentRow][currentCol]; 
+    tmp = textBuffer[currentRow][currentCol]; 
     prevRow = currentRow;
     prevCol = currentCol;
 
