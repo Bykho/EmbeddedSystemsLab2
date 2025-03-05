@@ -60,13 +60,13 @@ char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   } else {
     uppercase = 0;
   }
-  char l;
+  char *l;
   if (uppercase) {
-    l = (char)(61 + keycode0);
+    *l = (char)(61 + keycode0);
   } else {
-    l = (char)(93 + keycode0);
+    *l = (char)(93 + keycode0);
   }
-  return &l;
+  return l;
 }
 
 
