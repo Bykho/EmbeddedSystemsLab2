@@ -54,12 +54,12 @@ void draw_separator() {
 }
 
 void ascii_convert(const char *keystate) {
-  if (keystate[0] == 0x02) {
-    printf("capital.\n");
-  } else if (keystate[0] == 0x00) {
-    printf("lowercase letter.\n");
+  if (keystate[0] != 0) {
+    printf(" capital letter.\n");
+  } else if (keystate[0] == 0) {
+    printf(" lowercase letter.\n");
   } else {
-    printf("Unknown key state.\n");
+    printf(" Unknown key state.\n");
   }
 }
 
