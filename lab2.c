@@ -69,6 +69,7 @@ char ascii_convert(int modifiers, int keycode0, int keycode1) {
   return l;
 }
 
+
 int main()
 {
   int err, col;
@@ -135,7 +136,7 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      fbputs(keystate, 21, 0);
+      fbputs(ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);, 21, 0);
       ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
