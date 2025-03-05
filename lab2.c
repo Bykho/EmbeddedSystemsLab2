@@ -174,6 +174,7 @@ int main()
         }
         printf("\n");
       }
+      textBuffer[1][1] = 'K';
       fbputs(&l, currentRow, currentCol++);
 
 
