@@ -53,20 +53,20 @@ void draw_separator() {
     }
 }
 
-void ascii_convert(int modifiers, int keycode0, int keycode1) {
+char ascii_convert(int modifiers, int keycode0, int keycode1) {
   int uppercase = 0;
   if (modifiers == 2) {
     uppercase = 1;
   } else {
     uppercase = 0;
   }
+  char l;
   if (uppercase) {
-    char l = (char)(61 + keycode0); // Assuming keycode0 is in the range for lowercase letters
-    printf("The letter is: %c\n", l);
+    l = (char)(61 + keycode0);
   } else {
-    char l = (char)(93 + keycode0); // Assuming keycode0 is in the range for lowercase letters
-    printf("The letter is: %c\n", l);
+    l = (char)(93 + keycode0);
   }
+  return l;
 }
 
 int main()
