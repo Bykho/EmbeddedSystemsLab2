@@ -171,6 +171,7 @@ int main()
         
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow][currentCol] = l;
+        fbputs(&l, currentRow, currentCol++);
       }
 
       
@@ -181,7 +182,7 @@ int main()
         }
         printf("\n");
       }
-      fbputs(&l, currentRow, currentCol++);
+      //fbputs(&l, currentRow, currentCol++);
 
 
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
