@@ -172,7 +172,7 @@ int main()
         printf("after col checks\n");
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         printf("before changing textBuffer\n");
-        printf("l: %c\n", l);
+        printf("l: %c, currentRow: %d, currentCol: %d\n", l, currentRow, currentCol);
         textBuffer[currentRow][currentCol] = l;
         printf("before  fbputs\n");
         fbputs(&l, currentRow, currentCol++);
