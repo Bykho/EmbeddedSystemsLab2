@@ -53,7 +53,7 @@ void draw_separator() {
     }
 }
 
-char ascii_convert(int modifiers, int keycode0, int keycode1) {
+char ascii_convert(int modifiers, int keycode0) {
   int uppercase = 0;
   
   if (modifiers == 2) {
@@ -156,16 +156,22 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
 
-      //if (keystate )
+      if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed
+        currentCol--;
+      } else if (packet.keycode[0] == 0x4f) { // or mod 64 and refactor
+        currentCol++; 
+      } else {
+        char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      }
 
-      char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      if (currentCol> 64) {
+      if (currentCol > 64) {
         currentCol = 0;
         currentRow++;
       }
       if (currentRow>22) {
         currentRow = 21;
       }
+      
       textBuffer[currentRow][currentCol] = l;
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
