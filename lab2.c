@@ -176,7 +176,6 @@ int main()
         currentCol++;
       }
 
-      
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {

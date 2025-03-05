@@ -125,6 +125,9 @@ void fbputs(const char *s, int row, int col)
       for (int row = 0; row < TOTAL_ROWS; row++) {
         fbputchar(' ', row, col);
       }
+      for (int row = 0; row < 2; row++) {
+        fbputchar(' ', row + TOTAL_ROWS + 1, col);
+      }
     }
  }
 
