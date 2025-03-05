@@ -53,13 +53,13 @@ void draw_separator() {
     }
 }
 
-void ascii_convert(const char *keystate) {
-  printf("%c AC keystate[0]: ", keystate[0]);
-  printf("%c AC keystate[1]: ", keystate[1]);
-  printf("%c AC keystate[2]: ", keystate[2]);
-  printf("%c AC keystate[3]: ", keystate[3]);
-  printf("%c AC keystate[4]: ", keystate[4]);
-  printf("%c AC keystate[5]: ", keystate[5]);
+void ascii_convert(int modifiers, int keycode0, int keycode1) {
+  if (modifiers == 2) {
+    printf("Capital\n");
+  } else {
+    printf("Lowercase\n");
+  }
+  printf("hex val: %02x\n", keycode0);
 }
 
 
@@ -131,9 +131,8 @@ int main()
 	      packet.keycode[1]);
       printf("Here is keystate %s", keystate);
       printf("Here is packet modifiers %02x", packet.modifiers);
-      printf("\n \n");
       fbputs(keystate, 21, 0);
-      ascii_convert(keystate);
+      ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
