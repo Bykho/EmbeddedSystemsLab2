@@ -55,12 +55,13 @@ void draw_separator() {
 
 char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   int uppercase = 0;
-  printf("in ascii convert beginnning\n");
+  
   if (modifiers == 2) {
     uppercase = 1;
   } else {
     uppercase = 0;
   }
+  printf("before null\n");
   char *l = NULL;
   if (uppercase) {
     *l = (char)(61 + keycode0);
