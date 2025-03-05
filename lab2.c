@@ -133,11 +133,11 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  char textBuffer[2][64] = {0};
-  textBuffer[1][1]=1;
-  int rows = 2;
-  int cols = 64;
-  int currentRow = 0;
+  //char textBuffer[2][64] = {0};
+  //textBuffer[1][1]=1;
+  //int rows = 2;
+  //int cols = 64;
+  //int currentRow = 0;
   int currentCol = 0;
 
 
@@ -156,8 +156,12 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
+
+
       char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      fbputs(&l, 21, 0);
+      fbputs(&l, 21, currentCol++);
+
+
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
