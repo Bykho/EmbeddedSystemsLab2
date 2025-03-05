@@ -53,7 +53,7 @@ void draw_separator() {
     }
 }
 
-char *ascii_convert(int modifiers, int keycode0, int keycode1) {
+char ascii_convert(int modifiers, int keycode0, int keycode1) {
   int uppercase = 0;
   
   if (modifiers == 2) {
@@ -62,15 +62,15 @@ char *ascii_convert(int modifiers, int keycode0, int keycode1) {
     uppercase = 0;
   }
   
-  char*l;
+  char l;
   printf("before null\n");
   if (uppercase) {
     printf("before null\n");
-    *l = (char)(61 + keycode0);
+    l = (char)(61 + keycode0);
     printf("before null\n");
   } else {
     printf("before null\n");
-    *l = (char)(93 + keycode0);
+    l = (char)(93 + keycode0);
     printf("before null\n");
     
   }
