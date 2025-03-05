@@ -122,6 +122,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("%s\n", keystate);
+      printf('here is keystate: ', keystate);
       fbputs(keystate, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
@@ -192,3 +193,17 @@ void *network_thread_f(void *ignored)
   return NULL;
 }
 
+
+char ascii_convert(char *keystate) {
+  char value;
+
+  while (*keystate != '\0') {
+    if (*keystate >= '0' && *keystate <= '9') {
+      value = *keystate;
+      printf("%c\n", value);
+    }
+    keystate++;
+  }
+
+  return value;
+}
