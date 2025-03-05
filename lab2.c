@@ -137,7 +137,7 @@ int main()
   //textBuffer[1][1]=1;
   //int rows = 2;
   //int cols = 64;
-  //int currentRow = 0;
+  int currentRow = 21;
   int currentCol = 0;
 
 
@@ -159,7 +159,14 @@ int main()
 
 
       char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      fbputs(&l, 21, currentCol++);
+      if (currentCol> 64) {
+        currentCol = 0;
+        currentRow ++;
+      }
+      if (currentRow>23) {
+        currentRow = 21;
+      }
+      fbputs(&l, currentRow, currentCol++);
 
 
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
