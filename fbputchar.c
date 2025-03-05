@@ -81,7 +81,7 @@ void fbputchar(char c, int row, int col)
         pixel[2] = 255; /* Blue */
         pixel[3] = 0;
       } else {
-	      pixel[0] = 100;
+	      pixel[0] = 255;
         pixel[1] = 0; // changed this
         pixel[2] = 0;
         pixel[3] = 0;
