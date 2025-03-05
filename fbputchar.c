@@ -25,6 +25,9 @@
 #define FONT_WIDTH 8
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
+#define TOTAL_COLS 64
+#define TOTAL_ROWS 21
+// define boundaries for the top and bottom sections
 
 struct fb_var_screeninfo fb_vinfo;
 struct fb_fix_screeninfo fb_finfo;
@@ -49,7 +52,7 @@ int fbopen()
   if (fb_vinfo.bits_per_pixel != 32) return FBOPEN_BPP; /* Unexpected */
 
   framebuffer = mmap(0, fb_finfo.smem_len, PROT_READ | PROT_WRITE,
-		     MAP_SHARED, fd, 0);
+		     MAP_SHARED, fd, 0); // pointer to mapped area
   if (framebuffer == (unsigned char *)-1) return FBOPEN_MMAP;
 
   return 0;
@@ -111,6 +114,19 @@ void fbputs(const char *s, int row, int col)
   char c;
   while ((c = *s++) != 0) fbputchar(c, row, col++);
 }
+
+/*
+ * Clears the frame buffer to show only the top and bottom rows of decorative pixels
+ *
+ */
+ void fbclear() 
+ {
+    for (int col = 0; col < TOTAL_COLS; col++) {
+      for (int row = 0; row < TOTAL_ROWS; row++) {
+        fbputchar(' ', row, col);
+      }
+    }
+ }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
 
