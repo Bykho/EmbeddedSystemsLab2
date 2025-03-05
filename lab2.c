@@ -161,9 +161,9 @@ int main()
       char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (currentCol> 64) {
         currentCol = 0;
-        currentRow ++;
+        currentRow++;
       }
-      if (currentRow>23) {
+      if (currentRow>22) {
         currentRow = 21;
       }
       fbputs(&l, currentRow, currentCol++);
