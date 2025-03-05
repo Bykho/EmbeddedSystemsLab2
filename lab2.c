@@ -155,7 +155,6 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("annoying thing: %x\n", packet.keycode[0]);
       if (packet.keycode[0] == 0) {
         continue;
       }
