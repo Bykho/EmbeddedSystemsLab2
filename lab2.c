@@ -139,8 +139,6 @@ int main()
   int currentRow = 21;
   int currentCol = 0;
 
-
-
   // Define cursor by column and row.
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
