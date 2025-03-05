@@ -65,10 +65,10 @@ void ascii_convert(int modifiers, int keycode0, int keycode1) {
   printf("Ascii val 97 + keycode0: %d\n", 97+keycode0);
   printf("Ascii val 93 + keycode0: %d\n", 93+keycode0);
   printf("\n");
-  char letter = (char)(97 + keycode0); // Assuming keycode0 is in the range for lowercase letters
-  printf("The 97 letter is: %c\n", letter);
-  char letter = (char)(93 + keycode0); // Assuming keycode0 is in the range for lowercase letters
-  printf("The 93 letter is: %c\n", letter);
+  char l = (char)(97 + keycode0); // Assuming keycode0 is in the range for lowercase letters
+  printf("The 97 letter is: %c\n", l);
+  char l = (char)(93 + keycode0); // Assuming keycode0 is in the range for lowercase letters
+  printf("The 93 letter is: %c\n", l);
   
 }
 
