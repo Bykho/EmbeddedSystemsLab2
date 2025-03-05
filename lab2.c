@@ -40,6 +40,38 @@ uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
+
+// ADDING FUNCTIONS HERE
+
+#define TOTAL_COLS 64
+#define SEPARATOR_ROW 15
+
+
+void draw_separator() {
+  for (int col = 0; col < TOTAL_COLS; col++) {
+    fbputchar('-', SEPARATOR_ROW, col);
+    }
+}
+
+char ascii_convert(int modifiers, int keycode0, int keycode1) {
+  int uppercase = 0;
+  
+  if (modifiers == 2) {
+    uppercase = 1;
+  } else {
+    uppercase = 0;
+  }
+  
+  char l;
+  if (uppercase) {
+    l = (char)(61 + keycode0);
+  } else {
+    l = (char)(93 + keycode0);    
+  }
+  return l;
+}
+
+
 int main()
 {
   int err, col;
@@ -49,7 +81,6 @@ int main()
   struct usb_keyboard_packet packet;
   int transferred;
   char keystate[12];
-
   if ((err = fbopen()) != 0) {
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
@@ -61,10 +92,12 @@ int main()
   for (col = 0 ; col < 64 ; col++) {
     fbputchar('*', 0, col);
     fbputchar('*', 23, col);
-  }
+  }  
 
-  fbputs("Hello CSEE 4840 World!", 4, 10);
-
+  fbputs("Lab 2 Chat Server", 4, 10);
+  
+  draw_separator();
+  
   /* Open the keyboard */
   if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
     fprintf(stderr, "Did not find a keyboard\n");
@@ -100,12 +133,12 @@ int main()
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
+
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("%s\n", keystate);
-      // code modification here (could have a function that maps from )
-      fbputs(keystate, 6, 0);
+      char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      fbputs(&l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
@@ -121,17 +154,56 @@ int main()
   return 0;
 }
 
+//NICO PUSHED HERE
+//HERE IS WHERE WE WRITE THE CODE THAT SHOULD MANAGE INCOMING TRAFFIC AND DISPLAY IN TOP PORTION
+
 void *network_thread_f(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
-  /* Receive data */
-  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
-    recvBuf[n] = '\0';
-    printf("%s", recvBuf);
-    fbputs(recvBuf, 8, 0); // send when 
-  }
+  //Current line should do something like 
+  //allow us to choose where the messages get written to.
+  int current_line = 8;
 
+  //IN THIS WHILE LOOP WE ARE RECIEVING DATA
+  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
+    //check if were at the bottom, is yes clear the whole recieved text
+    if(current_line > SEPARATOR_ROW - 1) {
+      current_line = 8;
+      for(int i = 8; i < SEPARATOR_ROW; i++) {
+        for(int j = 0; j < TOTAL_COLS; j++) {
+          fbputs(" ", i, j);
+        }
+      }
+    }
+
+    recvBuf[n] = '\0';
+
+    // Initialize line_length to 0 and tokenize the received buffer by newline characters so that we go down by lines if we have that
+    int line_length = 0;
+    char *token = strtok(recvBuf, "\n");
+    while (token != NULL) {
+      // Calculate the length of the current line (which is the token)
+      line_length = strlen(token);
+      // If the line is longer than the total columns, wrap it so we dont go passed the right barrier of the screen
+      if (line_length > TOTAL_COLS) {
+        for (int i = 0; i < line_length; i += TOTAL_COLS) {
+          char line[TOTAL_COLS + 1];
+          // Copy a chunk of the line into a temporary buffer
+          strncpy(line, token + i, TOTAL_COLS);
+          line[TOTAL_COLS] = '\0';
+          // Print and display the wrapped line
+          printf("%s\n", line);
+          fbputs(line, current_line++, 0);
+        }
+      } else {
+        // If the line is not too long, just go ahead and print it direct
+        printf("%s\n", token);
+        fbputs(token, current_line++, 0);
+      }
+      // Move to the next line
+      token = strtok(NULL, "\n");
+    }
+  }
   return NULL;
 }
-
