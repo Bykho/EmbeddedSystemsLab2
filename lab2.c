@@ -55,9 +55,9 @@ void draw_separator() {
 
 void ascii_convert(int modifiers, int keycode0, int keycode1) {
   if (modifiers == 2) {
-    printf("Capital\n");
+    printf("The following letter is Capital\n");
   } else {
-    printf("Lowercase\n");
+    printf("The following letter is Lowercase\n");
   }
   printf("hex val: %02x\n", keycode0);
 }
@@ -129,8 +129,6 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("Here is keystate %s", keystate);
-      printf("Here is packet modifiers %02x", packet.modifiers);
       fbputs(keystate, 21, 0);
       ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
