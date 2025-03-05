@@ -64,8 +64,13 @@ void ascii_convert(const char *keystate) {
   }
 */
 
-  printf("%s AC keystate:   ", keystate);
-  printf("%c AC keystate[0]: ", keystate[1]);
+  printf("%s AC keystate[0]: ", keystate[0]);
+  printf("%c AC keystate[1]: ", keystate[1]);
+  printf("%c AC keystate[2]: ", keystate[2]);
+  printf("%c AC keystate[3]: ", keystate[3]);
+  printf("%c AC keystate[4]: ", keystate[4]);
+  printf("%c AC keystate[5]: ", keystate[5]);
+
 }
 
 
