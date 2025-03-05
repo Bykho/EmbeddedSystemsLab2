@@ -133,10 +133,9 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  //char textBuffer[2][64] = {0};
-  //textBuffer[1][1]=1;
-  //int rows = 2;
-  //int cols = 64;
+  char textBuffer[2][64] = {0};
+  int rows = 2;
+  int cols = 64;
   int currentRow = 21;
   int currentCol = 0;
 
@@ -165,6 +164,13 @@ int main()
       }
       if (currentRow>22) {
         currentRow = 21;
+      }
+      printf("about to print textBuffer: \n");
+      for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 64; j++) {
+          printf("%c", textBuffer[i][j]);
+          printf("\n");
+        }
       }
       fbputs(&l, currentRow, currentCol++);
 
