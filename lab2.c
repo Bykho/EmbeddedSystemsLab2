@@ -166,8 +166,8 @@ int main()
         currentRow = 21;
       }
       printf("about to print textBuffer: \n");
-      for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 64; j++) {
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
           printf("%c", textBuffer[i][j]);
           printf("\n");
         }
