@@ -136,20 +136,23 @@ int main()
   char textBuffer[2][64] = {{'a'}};
   int rows = 2;
   int cols = 64;
-  int currentRow = 21;
-  int currentCol = 0;
+  int prevRow, currentRow = 21;
+  int prevCol, currentCol = 0;
 
   // Define cursor by column and row.
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
 
-  //textBuffer[1][1] = 'C';
-  char l;
-
+  char tmp; 
   /* Look for and handle keypresses */
   for (;;) {
+    // Save the character (+ its location) that you're about to cover with the cursor.
+    char tmp = textBuffer[currentRow][currentCol]; 
+    prevRow = currentRow;
+    prevCol = currentCol;
+
     // Cursor
-     // Small bug: row switching is delayed. 
+    fbputchar('_', currentRow, currentCol); // Small bug: row switching is delayed. 
 
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
@@ -160,11 +163,12 @@ int main()
       if (packet.keycode[0] == 0) {
         continue;
       }
-      if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed
+      if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
         currentCol--;
-      } else if (packet.keycode[0] == 0x4f) { // or mod 64 and refactor
+        printf("left key press detected!\n");
+      } else if (packet.keycode[0] == 0x4f) { // Right arrow key pressed: cursor changed
         currentCol++; 
-      } else {
+      } else { // Normal typing thing: cursor changed. 
         if (currentCol > 64) {
           currentCol = 0;
           currentRow++;
@@ -172,12 +176,17 @@ int main()
         if (currentRow>22) {
           currentRow = 21;
         }
-        l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow-21][currentCol] = l;
+        fbputs(&l, currentRow, currentCol++);
       }
-      fbputs(&l, currentRow, currentCol++);
-      fbputchar('_', currentRow, currentCol);
 
+      // Following the cursor change, reset the character that the cursor briefly covered
+      fbputchar(tmp, prevRow, prevCol);
+
+
+
+      // FOR DEBUGGING:
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
