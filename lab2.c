@@ -60,6 +60,8 @@ void ascii_convert(int modifiers, int keycode0, int keycode1) {
     printf("The following letter is Lowercase\n");
   }
   printf("hex val: %02x\n", keycode0);
+  printf("Ascii val (minus): %d", keycode0 - 97);
+  printf("Ascii val (plus): %d", keycode0 - 97);
 }
 
 
