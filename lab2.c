@@ -161,6 +161,7 @@ int main()
       } else if (packet.keycode[0] == 0x4f) { // or mod 64 and refactor
         currentCol++; 
       } else {
+        printf("before col checks\n");
         if (currentCol > 64) {
           currentCol = 0;
           currentRow++;
@@ -168,10 +169,13 @@ int main()
         if (currentRow>22) {
           currentRow = 21;
         }
-        
+        printf("after col checks\n");
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        printf("before changing textBuffer\n");
         textBuffer[currentRow][currentCol] = l;
+        printf("before  fbputs\n");
         fbputs(&l, currentRow, currentCol++);
+        printf("after fbputs\n");
       }
 
       
