@@ -145,7 +145,7 @@ int main()
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
 
-
+  textBuffer[1][1] = 'C';
 
   /* Look for and handle keypresses */
   for (;;) {
@@ -166,7 +166,7 @@ int main()
         currentRow = 21;
       }
       textBuffer[0][0] = 'B';
-      textBuffer[1][1] = 'C';
+      
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
