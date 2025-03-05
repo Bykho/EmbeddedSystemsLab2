@@ -94,8 +94,8 @@ void fbputchar(char c, int row, int col)
         pixel[3] = 0;
       } else {
 	pixel[0] = 0;
-        pixel[1] = 0;
-        pixel[2] = 255; //changed this
+        pixel[1] = 100;
+        pixel[2] = 0; //changed this
         pixel[3] = 0;
       }
       pixel += 4;
