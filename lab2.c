@@ -64,9 +64,8 @@ void ascii_convert(const char *keystate) {
   }
 */
 
-  printf("%s This is keystate in ascii_convert: ", keystate);
-  printf("\n");
-  printf("%c Here is keystate[0] in ascii convert: ", keystate[1]);
+  printf("%s AC keystate:   ", keystate);
+  printf("%c AC keystate[0]: ", keystate[1]);
 }
 
 
