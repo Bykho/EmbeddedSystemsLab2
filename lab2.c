@@ -148,7 +148,7 @@ int main()
   /* Look for and handle keypresses */
   for (;;) {
     // Cursor
-    fbputchar('_', currentRow, currentCol);
+     // Small bug: row switching is delayed. 
 
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
@@ -173,9 +173,9 @@ int main()
         }
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow-21][currentCol] = l;
-        fbputs(&l, currentRow, currentCol++);
-        //currentCol++;
       }
+      fbputs(&l, currentRow, currentCol++);
+      fbputchar('_', currentRow, currentCol);
 
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
