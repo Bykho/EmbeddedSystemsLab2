@@ -121,7 +121,8 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("\nHere is keystate", keystate);
+      printf("Here is keystate", keystate);
+      printf();
       fbputs(keystate, 21, 0);
       ascii_convert(keystate);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
@@ -193,8 +194,7 @@ void *network_thread_f(void *ignored)
   return NULL;
 }
 
-
-char ascii_convert(char *keystate) {
+void ascii_convert(const char *keystate) {
   if (keystate[0] == 0x02) {
     printf("capital.\n");
   } else if (keystate[0] == 0x00) {
