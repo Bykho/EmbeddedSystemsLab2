@@ -54,6 +54,7 @@ void draw_separator() {
 }
 
 void ascii_convert(const char *keystate) {
+/*
   if (keystate[0] != 0) {
     printf(" capital letter.\n");
   } else if (keystate[0] == 0) {
@@ -61,6 +62,10 @@ void ascii_convert(const char *keystate) {
   } else {
     printf(" Unknown key state.\n");
   }
+*/
+
+  printf("%s Here is keystate: ", keystate);
+  printf("%s Here is keystate[0]: ", keystate[0]);
 }
 
 
