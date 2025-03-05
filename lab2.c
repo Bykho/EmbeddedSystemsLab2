@@ -147,6 +147,9 @@ int main()
 
   /* Look for and handle keypresses */
   for (;;) {
+    // Cursor
+    fbputchar('_', currentRow, currentCol);
+
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
