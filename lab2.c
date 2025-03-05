@@ -82,7 +82,7 @@ int main()
   struct usb_keyboard_packet packet;
   int transferred;
   char keystate[12];
-
+  printf("beinnign of program\n");
   if ((err = fbopen()) != 0) {
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
@@ -93,6 +93,8 @@ int main()
     fbputchar('*', 0, col);
     fbputchar('*', 23, col);
   }
+  printf("before first fbputs of program\n");
+  
 
   fbputs("Lab 2 Chat Server", 4, 10);
   
@@ -138,7 +140,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       char *l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      printf("before fbputs");
+      printf("before fbputs\n");
       fbputs(l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
