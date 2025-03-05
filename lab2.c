@@ -44,7 +44,7 @@ void *network_thread_f(void *);
 // ADDING FUNCTIONS HERE
 
 #define TOTAL_COLS 64
-#define SEPARATOR_ROW 15
+#define SEPARATOR_ROW 20
 
 
 void draw_separator() {
@@ -126,12 +126,22 @@ int main()
   /* Start the network thread */
   pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
+
+  //TODO
+  // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
+  // On enter send array to server.
+
+  // Define cursor by column and row.
+  // Functions: delete, cursor left, cursor right.
+  // Connect functions to key presses.
+
+
+
   /* Look for and handle keypresses */
   for (;;) {
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
-
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
