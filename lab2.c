@@ -55,6 +55,7 @@ void draw_separator() {
 
 char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   int uppercase = 0;
+  printf("in ascii convert beginnning");
   if (modifiers == 2) {
     uppercase = 1;
   } else {
@@ -65,7 +66,9 @@ char *ascii_convert(int modifiers, int keycode0, int keycode1) {
     *l = (char)(61 + keycode0);
   } else {
     *l = (char)(93 + keycode0);
+    
   }
+  printf("in ascii convert before return l");
   return l;
 }
 
@@ -135,6 +138,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       char *l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      printf("before fbputs");
       fbputs(l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
