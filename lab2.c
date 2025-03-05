@@ -89,7 +89,7 @@ int main()
   fbclear();
   
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < 64 ; col++) {
+  for (col = 0 ; col < TOTAL_COLS ; col++) {
     fbputchar('*', 0, col);
     fbputchar('*', 23, col);
   }  
@@ -133,9 +133,9 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  char textBuffer[2][64] = {{'a'}};
+  char textBuffer[2][TOTAL_COLS] = {{'a'}};
   int rows = 2;
-  int cols = 64;
+  int cols = TOTAL_COLS;
   int prevRow, currentRow = 21;
   int prevCol, currentCol = 0;
 
@@ -147,7 +147,7 @@ int main()
   /* Look for and handle keypresses */
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
-    tmp = textBuffer[currentRow][currentCol]; 
+    tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol]; 
     prevRow = currentRow;
     prevCol = currentCol;
 
@@ -169,7 +169,7 @@ int main()
       } else if (packet.keycode[0] == 0x4f) { // Right arrow key pressed: cursor changed
         currentCol++; 
       } else { // Normal typing thing: cursor changed. 
-        if (currentCol > 64) {
+        if (currentCol > TOTAL_COLS) {
           currentCol = 0;
           currentRow++;
         }
@@ -177,7 +177,7 @@ int main()
           currentRow = 21;
         }
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
-        textBuffer[currentRow-21][currentCol] = l;
+        textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol] = l;
         fbputs(&l, currentRow, currentCol++);
       }
 
