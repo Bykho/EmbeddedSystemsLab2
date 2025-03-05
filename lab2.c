@@ -53,7 +53,7 @@ void draw_separator() {
     }
 }
 
-char ascii_convert(int modifiers, int keycode0, int keycode1) {
+char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   int uppercase = 0;
   if (modifiers == 2) {
     uppercase = 1;
@@ -66,7 +66,7 @@ char ascii_convert(int modifiers, int keycode0, int keycode1) {
   } else {
     l = (char)(93 + keycode0);
   }
-  return l;
+  return &l;
 }
 
 
@@ -131,13 +131,11 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
 
-
-
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      fbputs(ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);, 21, 0);
-      ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      char *l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      fbputs(l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
