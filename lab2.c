@@ -165,6 +165,8 @@ int main()
       if (currentRow>22) {
         currentRow = 21;
       }
+      textBuffer[0][0] = 'B';
+      textBuffer[1][1] = 'C';
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
