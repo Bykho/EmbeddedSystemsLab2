@@ -61,12 +61,17 @@ char *ascii_convert(int modifiers, int keycode0, int keycode1) {
   } else {
     uppercase = 0;
   }
+  
+  char*l;
   printf("before null\n");
-  char *l = NULL;
   if (uppercase) {
+    printf("before null\n");
     *l = (char)(61 + keycode0);
+    printf("before null\n");
   } else {
+    printf("before null\n");
     *l = (char)(93 + keycode0);
+    printf("before null\n");
     
   }
   printf("in ascii convert before return l\n");
