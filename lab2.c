@@ -130,6 +130,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("Here is keystate %s", keystate);
+      printf(". Here is packet modifiers %s", packet.modifiers)
       printf("\n \n");
       fbputs(keystate, 21, 0);
       ascii_convert(keystate);
