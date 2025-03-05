@@ -156,6 +156,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
 
+      //if (keystate )
 
       char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (currentCol> 64) {
@@ -165,8 +166,7 @@ int main()
       if (currentRow>22) {
         currentRow = 21;
       }
-      textBuffer[0][0] = 'B';
-      
+      textBuffer[currentRow][currentCol] = l;
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -174,7 +174,6 @@ int main()
         }
         printf("\n");
       }
-      textBuffer[1][1] = 'K';
       fbputs(&l, currentRow, currentCol++);
 
 
