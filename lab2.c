@@ -161,18 +161,19 @@ int main()
       } else if (packet.keycode[0] == 0x4f) { // or mod 64 and refactor
         currentCol++; 
       } else {
-        char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+        if (currentCol > 64) {
+          currentCol = 0;
+          currentRow++;
+        }
+        if (currentRow>22) {
+          currentRow = 21;
+        }
+        
+        char l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        textBuffer[currentRow][currentCol] = l;
       }
 
-      if (currentCol > 64) {
-        currentCol = 0;
-        currentRow++;
-      }
-      if (currentRow>22) {
-        currentRow = 21;
-      }
       
-      textBuffer[currentRow][currentCol] = l;
       printf("about to print textBuffer: \n");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
