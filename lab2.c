@@ -143,9 +143,9 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("before ascii convert called\n");
-      char *l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
       printf("before fbputs\n");
-      fbputs(l, 21, 0);
+      fbputs(&l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
       }
