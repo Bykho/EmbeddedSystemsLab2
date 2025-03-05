@@ -156,6 +156,9 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
       printf("annoying thing: %x\n", packet.keycode[0]);
+      if (packet.keycode[0] == 0) {
+        continue;
+      }
       if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed
         currentCol--;
       } else if (packet.keycode[0] == 0x4f) { // or mod 64 and refactor
@@ -186,7 +189,7 @@ int main()
 
 
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	break;
+	      break;
       }
     }
   }
