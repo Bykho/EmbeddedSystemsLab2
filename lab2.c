@@ -133,7 +133,7 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  char textBuffer[2][64] = {61};
+  char textBuffer[2][64] = {1};
   int rows = 2;
   int cols = 64;
   int currentRow = 21;
