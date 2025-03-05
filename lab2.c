@@ -63,18 +63,11 @@ char ascii_convert(int modifiers, int keycode0, int keycode1) {
   }
   
   char l;
-  printf("before null\n");
   if (uppercase) {
-    printf("before null\n");
     l = (char)(61 + keycode0);
-    printf("before null\n");
   } else {
-    printf("before null\n");
-    l = (char)(93 + keycode0);
-    printf("before null\n");
-    
+    l = (char)(93 + keycode0);    
   }
-  printf("in ascii convert before return l\n");
   return l;
 }
 
@@ -142,9 +135,7 @@ int main()
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	      packet.keycode[1]);
-      printf("before ascii convert called\n");
       char l = ascii_convert(packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      printf("before fbputs\n");
       fbputs(&l, 21, 0);
       if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	break;
