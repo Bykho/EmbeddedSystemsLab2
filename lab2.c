@@ -177,7 +177,7 @@ int main()
         continue;
       }
       if (packet.keycode[0] == 0x28) { // Send message!
-        if (send_buffer_data((char **)textBuffer, TOTAL_COLS, TEXT_ROWS, TOTAL_COLS*TEXT_ROWS) < 0) {
+        if (send_buffer_data((char **)textBuffer, TOTAL_COLS, TEXT_ROWS, (TOTAL_COLS*TEXT_ROWS)) < 0) {
           exit(1);
         }
       }
