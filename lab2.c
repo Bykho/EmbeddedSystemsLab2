@@ -219,7 +219,7 @@ int main()
         prevCol = currentCol;
         
         msg_len--;
-        memset(textBuffer + msg_len, 0, sizeof(textBuffer) - msg_len); // erase the random junk in memory after the cursor
+        memset(textBuffer + msg_len, 32, sizeof(textBuffer) - msg_len); // erase the random junk in memory after the cursor
         
       }
       else // Normal text character inputted
