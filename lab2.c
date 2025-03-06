@@ -192,28 +192,20 @@ int main()
       }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
+        // Only move left if we're not at the leftmost position
+        if (currentCol > 0) {
+            currentCol--;
+        }
+      } 
+      else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
+      { 
         // Calculate total position in the buffer
         int currentPos = (currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS + currentCol;
         
-        // Only move if we're not at the start of the text
-        if (currentPos > 0 && currentPos <= msg_len) {
-            if (currentCol > 0) {
-                // Simple case: just move left in current row
-                currentCol--;
-            } else if (currentRow > SEPARATOR_ROW + 1) {
-                // Move to end of previous row
-                currentRow--;
-                currentCol = TOTAL_COLS - 1;
-            }
-            
-            // Update the display
-            fbputchar(tmp, prevRow, prevCol);  // Restore character at old position
-            tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save character at new position
+        // Only move right if we haven't reached the end of the message
+        if (currentPos < msg_len && currentCol < TOTAL_COLS - 1) {
+            currentCol++;
         }
-      } 
-      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TEXT_ROWS)) // Right arrow key pressed: only change cursor if it does not go past EOM. fix this bug. 
-      { 
-        currentCol++;
       }
       else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed. 
       {
@@ -253,8 +245,8 @@ int main()
         // or actually this could just always be the case
       } 
       // Following the cursor change, reset the character that the cursor briefly covered
-      fbputchar(tmp, prevRow, prevCol);
-      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save new character
+      fbputchar(tmp, prevRow, prevCol);  // Restore the previous character
+      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save the character at new position
       fbputchar('_', currentRow, currentCol);  // Show cursor at new position
 
 
