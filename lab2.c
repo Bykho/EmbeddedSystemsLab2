@@ -70,11 +70,13 @@ char ascii_convert(int modifiers, int keycode0) {
   if (keycode0 >= 0x1E && keycode0 <= 0x27) {
     l = (char)(0x12 + keycode0); // Offset to convert to ASCII numbers
   }
-
-  if (uppercase) {
-    l = (char)(61 + keycode0);
-  } else {
-    l = (char)(93 + keycode0);
+  // Letters
+  else if (keycode0 >= 0x04 && keycode0 <= 0x1D) {
+    if (uppercase) {
+      l = (char)(61 + keycode0);
+    } else {
+      l = (char)(93 + keycode0);
+    }
   }
   // Handle some common special characters
   else if (keycode0 >= 0x2D && keycode0 <= 0x38) {
