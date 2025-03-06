@@ -85,7 +85,7 @@ char ascii_convert(int modifiers, int keycode0) {
   // Handle some common special characters
   else if (keycode0 >= 45 && keycode0 <= 56) {
     if (uppercase) {
-      l = (char)(1 + keycode0); // Offset for shifted special characters
+      l = (char)(7 + keycode0); // Offset for shifted special characters
     } else {
       l = (char)(keycode0 - 9); // Offset for normal special characters
     }
