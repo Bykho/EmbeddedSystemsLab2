@@ -143,17 +143,20 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  char textBuffer[2][TOTAL_COLS] = {{'\0'}};
-  int rows = 2;
+  char textBuffer[TEXT_ROWS][TOTAL_COLS] = {{'\0'}};
+  int rows = TEXT_ROWS;
   int cols = TOTAL_COLS;
   int prevRow, currentRow = 21;
   int prevCol, currentCol = 0;
+  char tmp;
+  int msg_len = 0; 
 
   // Define cursor by column and row.
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
 
-  char tmp; 
+  
+
   /* Look for and handle keypresses */
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
@@ -167,34 +170,55 @@ int main()
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
-    if (transferred == sizeof(packet)) {
-      sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-	      packet.keycode[1]); // we don't need this, but figure it out maybe.
-      if (packet.keycode[0] == 0) { // If junk. 
+    
+    if (transferred == sizeof(packet)) 
+    {
+      // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
+	    //   packet.keycode[1]); // we don't need this, but figure it out maybe.
+      if (packet.keycode[0] == 0) 
+      { // If junk. 
         continue;
       }
-      if (packet.keycode[0] == 0x28) { // Send message!
-
+      if (packet.keycode[0] == 0x28) // If '/n', send message!
+      { 
         if (write(sockfd, (char *)textBuffer, TOTAL_COLS*TEXT_ROWS) < 0) {
           fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
           exit(1);
         }
       }
-      else if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
+      else if (packet.keycode[0] == 0x50 && currentCol > 0) // Left arrow key pressed: change cursor
+      { 
         currentCol--;
-        printf("left key press detected!\n");
-      } else if (packet.keycode[0] == 0x4f) { // Right arrow key pressed: cursor changed
-        currentCol++; 
-      } else { // Normal typing thing: cursor changed. 
-        if (currentCol > TOTAL_COLS) {
+      } 
+      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TOTAL_COLS)) // Right arrow key pressed: only change cursor if it does not go past EOM. 
+      { 
+        currentCol++;
+      }
+      else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed. 
+      {
+        // TODO:
+        // whenever cursor is at, delete that character 
+        // copy everything to the right of the cursor one slot to the left (use memmove)
+        // update tmp 
+        // update cursor (byt updating currentCol)
+        currentCol--;
+        msg_len--;
+        
+      }
+      else 
+      { // Normal typing thing: cursor changed. 
+        msg_len++;
+        if (currentCol > TOTAL_COLS) 
+        {
           currentCol = 0;
           currentRow++;
         }
-        if (currentRow>22) {
+        if (currentRow > 22) 
+        {
           currentRow = 21;
         }
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
-        textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol] = l;
+        textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputs(&l, currentRow, currentCol++);
       }
 
