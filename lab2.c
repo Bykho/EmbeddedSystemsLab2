@@ -229,27 +229,33 @@ int main()
       }
       else // Normal text character inputted
       { 
-        // Case 1: Cursor is at end of message. 
-        msg_len++;
-        if (currentCol > TOTAL_COLS) 
-        {
-          currentCol = 0;
-          currentRow++;
-        }
-        if (currentRow > 22) 
-        {
-          currentRow = 21;
-        }
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        
+        // If cursor is in the middle of text, shift everything right
+        if (currentCol < msg_len) {
+            // Shift characters to the right starting from the end
+            for (int i = msg_len; i > currentCol; i--) {
+                textBuffer[currentRow - SEPARATOR_ROW - 1][i] = textBuffer[currentRow - SEPARATOR_ROW - 1][i-1];
+                // Update display for each shifted character
+                fbputchar(textBuffer[currentRow - SEPARATOR_ROW - 1][i], currentRow, i);
+            }
+        }
+        
+        // Insert new character at cursor position
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
-        fbputs(&l, currentRow, currentCol++); // instead of doing this, i could just change everything at the end?
-
-        // Case 2: Cursor is somewhere in the middle of the message:
-        // TODO:
-        // in text buffer, modify so that everything to 
-        // the right of the cursor gets copied over one character 
-        // to the right, and the new character is inserted in that empty slot.
-        // or actually this could just always be the case
+        fbputchar(l, currentRow, currentCol);
+        
+        // Update position and length
+        msg_len++;
+        if (currentCol >= TOTAL_COLS - 1) {
+            currentCol = 0;
+            currentRow++;
+            if (currentRow > 22) {
+                currentRow = 21;
+            }
+        } else {
+            currentCol++;
+        }
       } 
       // Following the cursor change, reset the character that the cursor briefly covered
       fbputchar(tmp, prevRow, prevCol);  // Restore the previous character
