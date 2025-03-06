@@ -201,6 +201,7 @@ int main()
       {
         // TODO:
         // whenever cursor is at, delete that character 
+
         // copy everything to the right of the cursor one slot to the left (use memmove)
         // update tmp 
         // update cursor (byt updating currentCol)
@@ -208,8 +209,9 @@ int main()
         msg_len--;
         
       }
-      else 
-      { // Normal typing thing: cursor changed. 
+      else // Normal text character inputted
+      { 
+        // Case 1: Cursor is at end of message. 
         msg_len++;
         if (currentCol > TOTAL_COLS) 
         {
@@ -223,6 +225,13 @@ int main()
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputs(&l, currentRow, currentCol++);
+
+        // Case 2: Cursor is somewhere in the middle of the message:
+        // TODO:
+        // in text buffer, modify so that everything to 
+        // the right of the cursor gets copied over one character 
+        // to the right, and the new character is inserted in that empty slot.
+        // or actually this could just always be the case
       }
 
       // Following the cursor change, reset the character that the cursor briefly covered
