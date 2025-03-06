@@ -73,27 +73,14 @@ char ascii_convert(int modifiers, int keycode0) {
   return l;
 }
 
-int send_buffer_data(char ** buffer, int cols, int rows, int size)
-{
-  if (write(sockfd, (char *)buffer, size) < 0) {
-    fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
-    //free(data);
-    return -1;
-  }
-  // char *data = malloc(cols*rows);
-  // printf("after malloc\n");
-  // memcpy(data, buffer, cols);
-  // printf("after one memcpy\n");
-  // memcpy((data + cols), (buffer + cols), cols);
-  // printf("after both memcpy\n");
-  // if (write(sockfd, data, size) < 0) {
-  //   fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
-  //   free(data);
-  //   return -1;
-  // }
-  // free(data);
-  return 0;
-}
+// int send_buffer_data(char ** buffer, int cols, int rows, int size)
+// {
+//   if (write(sockfd, (char *)buffer, size) < 0) {
+//     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
+//     return -1;
+//   }
+//   return 0;
+// }
 
 int main()
 {
@@ -187,7 +174,9 @@ int main()
         continue;
       }
       if (packet.keycode[0] == 0x28) { // Send message!
-        if (send_buffer_data((char **)textBuffer, TOTAL_COLS, TEXT_ROWS, (TOTAL_COLS*TEXT_ROWS)) < 0) {
+
+        if (write(sockfd, (char *)textBuffer, TOTAL_COLS*TEXT_ROWS) < 0) {
+          fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
           exit(1);
         }
       }
