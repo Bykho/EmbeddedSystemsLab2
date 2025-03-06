@@ -77,7 +77,7 @@ int send_buffer_data(char ** buffer, int cols, int rows, int size)
 {
   if (write(sockfd, (char *)buffer, size) < 0) {
     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
-    free(data);
+    //free(data);
     return -1;
   }
   // char *data = malloc(cols*rows);
