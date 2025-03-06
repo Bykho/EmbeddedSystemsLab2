@@ -193,7 +193,7 @@ int main()
       { 
         currentCol--;
       } 
-      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TOTAL_COLS)) // Right arrow key pressed: only change cursor if it does not go past EOM. 
+      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TOTAL_COLS)) // Right arrow key pressed: only change cursor if it does not go past EOM. fix this bug. 
       { 
         currentCol++;
       }
@@ -203,9 +203,10 @@ int main()
         // whenever cursor is at, delete that character 
 
         // copy everything to the right of the cursor one slot to the left (use memmove)
+        printf("before memmove\n");
         memmove(&textBuffer[currentRow][currentCol], 
           &textBuffer[currentRow][currentCol+1], msg_len - currentCol - 1);
-        
+        printf("after memmove\n");
         // update cursor (byt updating currentCol)
         currentCol--;
 
