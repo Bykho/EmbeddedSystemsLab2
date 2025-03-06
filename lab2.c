@@ -194,7 +194,7 @@ int main()
       { 
         currentCol--;
       } 
-      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TOTAL_COLS)) // Right arrow key pressed: only change cursor if it does not go past EOM. fix this bug. 
+      else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TEXT_ROWS)) // Right arrow key pressed: only change cursor if it does not go past EOM. fix this bug. 
       { 
         currentCol++;
       }
