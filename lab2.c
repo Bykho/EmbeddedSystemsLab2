@@ -206,15 +206,16 @@ int main()
         // whenever cursor is at, delete that character 
 
         // copy everything to the right of the cursor one slot to the left (use memmove)
+        printf("beforemmemove\n");
         memmove(&textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol], 
           &textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol+1], msg_len - currentCol - 1); // but this has to get displayed right away lowkey
-        
+        printf("after memmove\n");
 
         // update cursor (byt updating currentCol)
         currentCol--;
 
         // update tmp + prev row/col stuff--refactor maybe?
-        tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol]; 
+        tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol]; 
         prevRow = currentRow;
         prevCol = currentCol;
         
