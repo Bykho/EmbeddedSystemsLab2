@@ -157,8 +157,6 @@ int main()
   // Functions: delete, cursor left, cursor right.
   // Connect functions to key presses.
 
-  
-
   /* Look for and handle keypresses */
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
@@ -221,6 +219,7 @@ int main()
         prevCol = currentCol;
         
         msg_len--;
+        memset(textBuffer + msg_len, 0, sizeof(textBuffer) - msg_len); // erase the random junk in memory after the cursor
         
       }
       else // Normal text character inputted
