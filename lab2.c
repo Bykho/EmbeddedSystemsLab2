@@ -75,9 +75,9 @@ char ascii_convert(int modifiers, int keycode0) {
 
 int send_buffer_data(char ** buffer, int cols, int rows, int size)
 {
-  char * data = malloc(cols*rows);
-  memcpy(*data, *buffer, cols);
-  memcpy(data[cols], buffer[1], cols);
+  char *data = malloc(cols*rows);
+  memcpy(data, *buffer, cols);
+  memcpy((data + cols), buffer[1], cols);
   if (write(sockfd, data, size) < 0) {
     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
     exit(1);
