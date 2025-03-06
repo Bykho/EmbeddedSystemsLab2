@@ -204,8 +204,8 @@ int main()
 
         // copy everything to the right of the cursor one slot to the left (use memmove)
         printf("before memmove\n");
-        memmove(&textBuffer[currentRow][currentCol], 
-          &textBuffer[currentRow][currentCol+1], msg_len - currentCol - 1);
+        memmove(&textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol], 
+          &textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol+1], msg_len - currentCol - 1);
         printf("after memmove\n");
         // update cursor (byt updating currentCol)
         currentCol--;
