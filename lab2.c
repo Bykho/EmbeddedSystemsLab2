@@ -68,7 +68,7 @@ char ascii_convert(int modifiers, int keycode0) {
   char l;
   // NUmbers
   if (keycode0 >= 30 && keycode0 <= 39) {
-    l = (char)(17 + keycode0); // Offset to convert to ASCII numbers
+    l = (char)(19 + keycode0); // Offset to convert to ASCII numbers
   }
   // Letters
   else if (keycode0 >= 4 && keycode0 <= 29) {
