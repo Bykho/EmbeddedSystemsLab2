@@ -190,9 +190,26 @@ int main()
         currentRow = SEPARATOR_ROW + 1;
         memset(textBuffer, 0, sizeof(textBuffer));
       }
-      else if (packet.keycode[0] == 0x50 && currentCol > 0) // Left arrow key pressed: change cursor
+      else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
-        currentCol--;
+        // Calculate total position in the buffer
+        int currentPos = (currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS + currentCol;
+        
+        // Only move if we're not at the start of the text
+        if (currentPos > 0 && currentPos <= msg_len) {
+            if (currentCol > 0) {
+                // Simple case: just move left in current row
+                currentCol--;
+            } else if (currentRow > SEPARATOR_ROW + 1) {
+                // Move to end of previous row
+                currentRow--;
+                currentCol = TOTAL_COLS - 1;
+            }
+            
+            // Update the display
+            fbputchar(tmp, prevRow, prevCol);  // Restore character at old position
+            tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save character at new position
+        }
       } 
       else if (packet.keycode[0] == 0x4f && currentCol < (msg_len % TEXT_ROWS)) // Right arrow key pressed: only change cursor if it does not go past EOM. fix this bug. 
       { 
@@ -237,7 +254,8 @@ int main()
       } 
       // Following the cursor change, reset the character that the cursor briefly covered
       fbputchar(tmp, prevRow, prevCol);
-      fbputchar('_', currentRow, currentCol); 
+      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save new character
+      fbputchar('_', currentRow, currentCol);  // Show cursor at new position
 
 
 
