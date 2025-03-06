@@ -207,17 +207,24 @@ int main()
             currentCol++;
         }
       }
-      else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed. 
+      else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed
       {
-        // Ensure we do not go out of bounds
-        if (msg_len > 0) {
-            // Shift characters to the left
+        // Only delete if we're not at the start of the line and have content to delete
+        if (currentCol > 0 && msg_len > 0) {
+            currentCol--; // Move cursor left first
+            
+            // Shift all characters to the right of cursor one position left
             for (int i = currentCol; i < msg_len - 1; i++) {
                 textBuffer[currentRow - SEPARATOR_ROW - 1][i] = textBuffer[currentRow - SEPARATOR_ROW - 1][i + 1];
+                // Update display for each shifted character
+                fbputchar(textBuffer[currentRow - SEPARATOR_ROW - 1][i], currentRow, i);
             }
-            textBuffer[currentRow - SEPARATOR_ROW - 1][msg_len - 1] = ' '; // Clear the last character
+            
+            // Clear the last character position in both buffer and display
+            textBuffer[currentRow - SEPARATOR_ROW - 1][msg_len - 1] = ' ';
+            fbputchar(' ', currentRow, msg_len - 1);
+            
             msg_len--; // Decrease message length
-            currentCol--; // Move cursor left
         }
       }
       else // Normal text character inputted
