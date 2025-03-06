@@ -206,8 +206,8 @@ int main()
         // copy everything to the right of the cursor one slot to the left (use memmove)
         printf("beforemmemove\n");
         printf("currentRow: %d, currentCol: %d, msglen: %d\n", currentRow, currentCol, msg_len);
-        memmove(&textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol], 
-          &textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol+1], msg_len - currentCol - 1); // but this has to get displayed right away lowkey
+        memmove(&textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol-1], // bug: currentCol is acting as if indexed starting at 1, not 0. 
+          &textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol], msg_len - currentCol - 1); // but this has to get displayed right away lowkey
         printf("after memmove\n");
 
         // update cursor (byt updating currentCol)
