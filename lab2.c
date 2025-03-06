@@ -46,6 +46,7 @@ void *network_thread_f(void *);
 
 #define TOTAL_COLS 64
 #define SEPARATOR_ROW 20
+#define TEXT_ROWS
 
 
 void draw_separator() {
@@ -75,8 +76,8 @@ char ascii_convert(int modifiers, int keycode0) {
 int send_buffer_data(char ** buffer, int cols, int rows, int size)
 {
   char * data = malloc(cols*rows);
-  memcpy(*data, *buffer);
-  memcpy(data[cols], buffer[1]);
+  memcpy(*data, *buffer, cols);
+  memcpy(data[cols], buffer[1], cols);
   if (write(sockfd, data, size) < 0) {
     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
     exit(1);
@@ -175,7 +176,7 @@ int main()
         continue;
       }
       if (packet.keycode[0] == 0x28) { // Send message!
-        send_buffer_data(textBuffer, TOTAL_COLS, TOTAL_ROWS, TOTAL_COLS*TOTAL_ROWS);
+        send_buffer_data(textBuffer, TOTAL_COLS, TEXT_ROWS, TOTAL_COLS*TEXT_ROWS);
       }
       else if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
         currentCol--;
