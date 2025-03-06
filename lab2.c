@@ -80,8 +80,9 @@ int send_buffer_data(char ** buffer, int cols, int rows, int size)
   memcpy((data + cols), buffer[1], cols);
   if (write(sockfd, data, size) < 0) {
     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
-    exit(1);
-  } 
+    return -1;
+  }
+  return 0;
 }
 
 int main()
@@ -176,7 +177,9 @@ int main()
         continue;
       }
       if (packet.keycode[0] == 0x28) { // Send message!
-        send_buffer_data(textBuffer, TOTAL_COLS, TEXT_ROWS, TOTAL_COLS*TEXT_ROWS);
+        if (send_buffer_data((char **)textBuffer, TOTAL_COLS, TEXT_ROWS, TOTAL_COLS*TEXT_ROWS) < 0) {
+          exit(1);
+        }
       }
       else if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
         currentCol--;
