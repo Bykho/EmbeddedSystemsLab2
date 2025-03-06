@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "usbkeyboard.h"
 #include <pthread.h>
+#include <errno.h>
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -71,6 +72,16 @@ char ascii_convert(int modifiers, int keycode0) {
   return l;
 }
 
+int send_buffer_data(char ** buffer, int cols, int rows, int size)
+{
+  char * data = malloc(cols*rows);
+  memcpy(*data, *buffer);
+  memcpy(data[cols], buffer[1]);
+  if (write(sockfd, data, size) < 0) {
+    fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
+    exit(1);
+  } 
+}
 
 int main()
 {
@@ -133,7 +144,7 @@ int main()
   // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
   // On enter send array to server.
 
-  char textBuffer[2][TOTAL_COLS] = {{'a'}};
+  char textBuffer[2][TOTAL_COLS] = {{'\0'}};
   int rows = 2;
   int cols = TOTAL_COLS;
   int prevRow, currentRow = 21;
@@ -159,11 +170,14 @@ int main()
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-	      packet.keycode[1]);
-      if (packet.keycode[0] == 0) {
+	      packet.keycode[1]); // we don't need this, but figure it out maybe.
+      if (packet.keycode[0] == 0) { // If junk. 
         continue;
       }
-      if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
+      if (packet.keycode[0] == 0x28) { // Send message!
+        send_buffer_data(textBuffer, TOTAL_COLS, TOTAL_ROWS, TOTAL_COLS*TOTAL_ROWS);
+      }
+      else if (packet.keycode[0] == 0x50 && currentCol > 0) { // Left arrow key pressed: cursor changed
         currentCol--;
         printf("left key press detected!\n");
       } else if (packet.keycode[0] == 0x4f) { // Right arrow key pressed: cursor changed
