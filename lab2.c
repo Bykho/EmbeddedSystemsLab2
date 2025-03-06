@@ -77,7 +77,7 @@ int send_buffer_data(char ** buffer, int cols, int rows, int size)
 {
   char *data = malloc(cols*rows);
   printf("after malloc\n");
-  memcpy(data, *buffer, cols);
+  memcpy(data, buffer, cols);
   printf("after one memcpy\n");
   memcpy((data + cols), buffer[1], cols);
   printf("after both memcpy\n");
