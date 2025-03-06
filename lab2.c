@@ -96,7 +96,9 @@ int main()
     exit(1);
   }
 
-  fbclear();
+  fbcleartop();
+  fbclearbottom();
+
   
   /* Draw rows of asterisks across the top and bottom of the screen */
   for (col = 0 ; col < TOTAL_COLS ; col++) {
@@ -185,6 +187,7 @@ int main()
           fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
           exit(1);
         }
+        fbclearbottom();
       }
       else if (packet.keycode[0] == 0x50 && currentCol > 0) // Left arrow key pressed: change cursor
       { 

@@ -119,17 +119,25 @@ void fbputs(const char *s, int row, int col)
  * Clears the frame buffer to show only the top and bottom rows of decorative pixels
  *
  */
- void fbclear() 
- {
-    for (int col = 0; col < TOTAL_COLS; col++) {
-      for (int row = 0; row < TOTAL_ROWS; row++) {
-        fbputchar(' ', row, col);
-      }
-      for (int row = 0; row < 2; row++) {
-        fbputchar(' ', row + TOTAL_ROWS, col);
-      }
+void fbcleartop() 
+{
+  for (int col = 0; col < TOTAL_COLS; col++) {
+    for (int row = 0; row < TOTAL_ROWS; row++) {
+      fbputchar(' ', row, col);
     }
- }
+  }
+}
+
+void fbclearbottom()
+{
+  for (int col = 0; col < TOTAL_COLS; col++) {
+    for (int row = 0; row < 2; row++) {
+      fbputchar(' ', row + TOTAL_ROWS, col);
+    }
+  }
+}
+
+
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
 
