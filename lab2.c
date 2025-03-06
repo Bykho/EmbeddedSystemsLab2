@@ -56,6 +56,7 @@ void draw_separator() {
 }
 
 char ascii_convert(int modifiers, int keycode0) {
+  printf("ASCII_CONVERT:ascii_convert called with modifiers: %d, keycode0: %d\n", modifiers, keycode0);
   int uppercase = 0;
   
   if (modifiers == 2) {
@@ -65,10 +66,26 @@ char ascii_convert(int modifiers, int keycode0) {
   }
   
   char l;
+  // NUmbers
+  if (keycode0 >= 0x1E && keycode0 <= 0x27) {
+    l = (char)(0x12 + keycode0); // Offset to convert to ASCII numbers
+  }
+
   if (uppercase) {
     l = (char)(61 + keycode0);
   } else {
-    l = (char)(93 + keycode0);    
+    l = (char)(93 + keycode0);
+  }
+  // Handle some common special characters
+  else if (keycode0 >= 0x2D && keycode0 <= 0x38) {
+    if (uppercase) {
+      l = (char)(0x1 + keycode0); // Offset for shifted special characters
+    } else {
+      l = (char)(0x5 + keycode0); // Offset for normal special characters
+    }
+  }
+  else {
+    l = ' '; // Default to space for unhandled keycodes
   }
   return l;
 }
@@ -188,41 +205,62 @@ int main()
         fbclearbottom();
         currentCol = 0;
         currentRow = SEPARATOR_ROW + 1;
+        msg_len = 0;  // Reset message length
         memset(textBuffer, 0, sizeof(textBuffer));
       }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
-        // Only move left if we're not at the leftmost position
-        if (currentCol > 0) {
-            currentCol--;
+        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
+        
+        // Move left if we're not at the start of text
+        if (currentAbsPos > 0) {
+            if (currentCol > 0) {
+                currentCol--;
+            } else if (currentRow > SEPARATOR_ROW + 1) {
+                currentRow--;
+                currentCol = TOTAL_COLS - 1;
+            }
         }
       } 
       else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
       { 
-        // Calculate total position in the buffer
-        int currentPos = (currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS + currentCol;
+        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
         // Only move right if we haven't reached the end of the message
-        if (currentPos < msg_len && currentCol < TOTAL_COLS - 1) {
-            currentCol++;
+        if (currentAbsPos < msg_len) {
+            if (currentCol >= TOTAL_COLS - 1) {
+                currentRow++;
+                currentCol = 0;
+            } else {
+                currentCol++;
+            }
         }
       }
       else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed
       {
+        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
+        
         // Only delete if we're not at the start of the line and have content to delete
         if (currentCol > 0 && msg_len > 0) {
             currentCol--; // Move cursor left first
+            currentAbsPos--;
             
             // Shift all characters to the right of cursor one position left
-            for (int i = currentCol; i < msg_len - 1; i++) {
-                textBuffer[currentRow - SEPARATOR_ROW - 1][i] = textBuffer[currentRow - SEPARATOR_ROW - 1][i + 1];
-                // Update display for each shifted character
-                fbputchar(textBuffer[currentRow - SEPARATOR_ROW - 1][i], currentRow, i);
+            for (int i = currentAbsPos; i < msg_len - 1; i++) {
+                int row = (i / TOTAL_COLS) + SEPARATOR_ROW + 1;
+                int col = i % TOTAL_COLS;
+                int nextRow = ((i+1) / TOTAL_COLS) + SEPARATOR_ROW + 1;
+                int nextCol = (i+1) % TOTAL_COLS;
+                
+                textBuffer[row - SEPARATOR_ROW - 1][col] = textBuffer[nextRow - SEPARATOR_ROW - 1][nextCol];
+                fbputchar(textBuffer[row - SEPARATOR_ROW - 1][col], row, col);
             }
             
-            // Clear the last character position in both buffer and display
-            textBuffer[currentRow - SEPARATOR_ROW - 1][msg_len - 1] = ' ';
-            fbputchar(' ', currentRow, msg_len - 1);
+            // Clear the last character position
+            int lastRow = ((msg_len-1) / TOTAL_COLS) + SEPARATOR_ROW + 1;
+            int lastCol = (msg_len-1) % TOTAL_COLS;
+            textBuffer[lastRow - SEPARATOR_ROW - 1][lastCol] = ' ';
+            fbputchar(' ', lastRow, lastCol);
             
             msg_len--; // Decrease message length
         }
@@ -232,29 +270,32 @@ int main()
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         
         // If cursor is in the middle of text, shift everything right
-        if (currentCol < msg_len) {
-            // Shift characters to the right starting from the end
-            for (int i = msg_len; i > currentCol; i--) {
-                textBuffer[currentRow - SEPARATOR_ROW - 1][i] = textBuffer[currentRow - SEPARATOR_ROW - 1][i-1];
-                // Update display for each shifted character
-                fbputchar(textBuffer[currentRow - SEPARATOR_ROW - 1][i], currentRow, i);
+        // Calculate absolute position in buffer based on current row and column
+        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
+        
+        // If cursor is in the middle of text, shift everything right
+        if (currentAbsPos < msg_len) {
+            // Shift all characters from cursor position to end of message
+            for (int i = msg_len; i > currentAbsPos; i--) {
+                int row = (i / TOTAL_COLS) + SEPARATOR_ROW + 1;
+                int col = i % TOTAL_COLS;
+                int prevRow = ((i-1) / TOTAL_COLS) + SEPARATOR_ROW + 1;
+                int prevCol = (i-1) % TOTAL_COLS;
+                
+                textBuffer[row - SEPARATOR_ROW - 1][col] = textBuffer[prevRow - SEPARATOR_ROW - 1][prevCol];
+                fbputchar(textBuffer[row - SEPARATOR_ROW - 1][col], row, col);
             }
         }
         
-        // Insert new character at cursor position
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputchar(l, currentRow, currentCol);
         
         // Update position and length
         msg_len++;
-        if (currentCol >= TOTAL_COLS - 1) {
-            currentCol = 0;
-            currentRow++;
-            if (currentRow > 22) {
-                currentRow = 21;
-            }
-        } else {
-            currentCol++;
+        int newAbsPos = currentAbsPos + 1;
+        if (newAbsPos < TEXT_ROWS * TOTAL_COLS) {  // Check if we have room
+            currentRow = (newAbsPos / TOTAL_COLS) + SEPARATOR_ROW + 1;
+            currentCol = newAbsPos % TOTAL_COLS;
         }
       } 
       // Following the cursor change, reset the character that the cursor briefly covered
