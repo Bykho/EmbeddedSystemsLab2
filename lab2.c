@@ -200,27 +200,16 @@ int main()
       }
       else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed. 
       {
-        // TODO:
-        // whenever cursor is at, delete that character 
-
-        // copy everything to the right of the cursor one slot to the left (use memmove)
-        printf("beforemmemove\n");
-        printf("currentRow: %d, currentCol: %d, msglen: %d\n", currentRow, currentCol, msg_len);
-        memmove(&textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol], // Corrected to use currentCol as the starting point
-          &textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol + 1], msg_len - currentCol); // Adjusted to move characters to the right of currentCol
-        printf("after memmove\n");
-
-        // update cursor (byt updating currentCol)
-        currentCol--;
-
-        // update tmp + prev row/col stuff--refactor maybe?
-        tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol]; 
-        prevRow = currentRow;
-        prevCol = currentCol;
-        
-        msg_len--;
-        memset(textBuffer + msg_len, 32, sizeof(textBuffer) - msg_len); // erase the random junk in memory after the cursor
-        
+        // Ensure we do not go out of bounds
+        if (msg_len > 0) {
+            // Shift characters to the left
+            for (int i = currentCol; i < msg_len - 1; i++) {
+                textBuffer[currentRow - SEPARATOR_ROW - 1][i] = textBuffer[currentRow - SEPARATOR_ROW - 1][i + 1];
+            }
+            textBuffer[currentRow - SEPARATOR_ROW - 1][msg_len - 1] = ' '; // Clear the last character
+            msg_len--; // Decrease message length
+            currentCol--; // Move cursor left
+        }
       }
       else // Normal text character inputted
       { 
