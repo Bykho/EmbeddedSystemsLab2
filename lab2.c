@@ -188,6 +188,9 @@ int main()
           exit(1);
         }
         fbclearbottom();
+        currentCol = 0;
+        currentRow = 0;
+        memset(textBuffer, 0, sizeof(textBuffer));
       }
       else if (packet.keycode[0] == 0x50 && currentCol > 0) // Left arrow key pressed: change cursor
       { 
