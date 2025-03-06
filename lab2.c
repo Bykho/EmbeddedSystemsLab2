@@ -203,9 +203,17 @@ int main()
         // whenever cursor is at, delete that character 
 
         // copy everything to the right of the cursor one slot to the left (use memmove)
-        // update tmp 
+        memmove(&textBuffer[currentRow][currentCol], 
+          &textBuffer[currentRow][currentCol+1], msg_len - currentCol - 1);
+        
         // update cursor (byt updating currentCol)
         currentCol--;
+
+        // update tmp + prev row/col stuff--refactor maybe?
+        tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol]; 
+        prevRow = currentRow;
+        prevCol = currentCol;
+        
         msg_len--;
         
       }
