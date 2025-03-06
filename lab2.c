@@ -87,7 +87,7 @@ char ascii_convert(int modifiers, int keycode0) {
     if (uppercase) {
       l = (char)(1 + keycode0); // Offset for shifted special characters
     } else {
-      l = (char)(5 + keycode0); // Offset for normal special characters
+      l = (char)(keycode0 - 10); // Offset for normal special characters
     }
   }
   else {
