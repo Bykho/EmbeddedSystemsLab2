@@ -247,7 +247,7 @@ int main()
       }
 
       fbputs(textBuffer[0], SEPARATOR_ROW + 1, 0); // copy over first row
-      fbputs(textBuffer[1], SEPARATOR_ROW + 12, 0) // have updated 
+      fbputs(textBuffer[1], SEPARATOR_ROW + 12, 0); // have updated 
       // Following the cursor change, reset the character that the cursor briefly covered
       fbputchar(tmp, prevRow, prevCol);
       fbputchar('_', currentRow, currentCol); 
