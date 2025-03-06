@@ -67,11 +67,11 @@ char ascii_convert(int modifiers, int keycode0) {
   
   char l;
   // NUmbers
-  if (keycode0 >= 0x1E && keycode0 <= 0x27) {
-    l = (char)(0x12 + keycode0); // Offset to convert to ASCII numbers
+  if (keycode0 >= 30 && keycode0 <= 39) {
+    l = (char)(18 + keycode0); // Offset to convert to ASCII numbers
   }
   // Letters
-  else if (keycode0 >= 0x04 && keycode0 <= 0x1D) {
+  else if (keycode0 >= 4 && keycode0 <= 29) {
     if (uppercase) {
       l = (char)(61 + keycode0);
     } else {
@@ -79,11 +79,11 @@ char ascii_convert(int modifiers, int keycode0) {
     }
   }
   // Handle some common special characters
-  else if (keycode0 >= 0x2D && keycode0 <= 0x38) {
+  else if (keycode0 >= 45 && keycode0 <= 56) {
     if (uppercase) {
-      l = (char)(0x1 + keycode0); // Offset for shifted special characters
+      l = (char)(1 + keycode0); // Offset for shifted special characters
     } else {
-      l = (char)(0x5 + keycode0); // Offset for normal special characters
+      l = (char)(5 + keycode0); // Offset for normal special characters
     }
   }
   else {
