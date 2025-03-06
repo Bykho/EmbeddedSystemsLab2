@@ -148,7 +148,7 @@ int main()
   char textBuffer[TEXT_ROWS][TOTAL_COLS] = {{'\0'}};
   int rows = TEXT_ROWS;
   int cols = TOTAL_COLS;
-  int prevRow, currentRow = 21;
+  int prevRow, currentRow = SEPARATOR_ROW + 1;
   int prevCol, currentCol = 0;
   char tmp;
   int msg_len = 0; 
@@ -189,7 +189,7 @@ int main()
         }
         fbclearbottom();
         currentCol = 0;
-        currentRow = 0;
+        currentRow = SEPARATOR_ROW + 1;
         memset(textBuffer, 0, sizeof(textBuffer));
       }
       else if (packet.keycode[0] == 0x50 && currentCol > 0) // Left arrow key pressed: change cursor
