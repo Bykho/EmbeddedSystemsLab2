@@ -46,7 +46,7 @@ void *network_thread_f(void *);
 
 #define TOTAL_COLS 64
 #define SEPARATOR_ROW 20
-#define TEXT_ROWS
+#define TEXT_ROWS 2
 
 
 void draw_separator() {
