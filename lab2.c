@@ -79,7 +79,7 @@ int send_buffer_data(char ** buffer, int cols, int rows, int size)
   printf("after malloc\n");
   memcpy(data, buffer, cols);
   printf("after one memcpy\n");
-  memcpy((data + cols), buffer[1], cols);
+  memcpy((data + cols), (buffer + cols), cols);
   printf("after both memcpy\n");
   if (write(sockfd, data, size) < 0) {
     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
