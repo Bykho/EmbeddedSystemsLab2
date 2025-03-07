@@ -314,8 +314,9 @@ int main()
             currentCol = newAbsPos % TOTAL_COLS;
         }
       } 
-      ////BACK WHERE TEMP EAS
+      if (currentAbsPos != msg_len) {
       fbputchar('_', currentRow, currentCol);
+      }      
 
 
 
