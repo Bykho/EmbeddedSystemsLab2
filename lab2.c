@@ -324,7 +324,7 @@ int main()
         fbputchar(tmp, prevRow, prevCol);
         tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
       }
-      else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed
+      else if (packet.keycode[0] == 0x2a) // Backspace pressed
       {
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
@@ -336,7 +336,13 @@ int main()
                 fbputchar(' ', currentRow, currentCol);
             }
             
-            currentCol--; // Move cursor left first
+            // Handle cursor movement when backspacing
+            if (currentCol > 0) {
+                currentCol--; // Move cursor left if not at start of line
+            } else if (currentRow > SEPARATOR_ROW + 1) {
+                currentRow--; // Move up a row
+                currentCol = TOTAL_COLS - 1; // Move to end of previous row
+            }
             currentAbsPos--;
             
             // Shift all characters to the right of cursor one position left
