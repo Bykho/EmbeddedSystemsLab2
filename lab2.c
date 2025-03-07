@@ -120,7 +120,86 @@ char ascii_convert(int modifiers, int keycode0) {
         l = '\'';
       }
     }
-    //if (keycode0 == )
+    if (keycode0 == 54) {
+      if (uppercase) {
+        l = ',';
+      } else {
+        l = '<';
+      }
+    }
+    if (keycode0 == 55) {
+      if (uppercase) {
+        l = '.';
+      } else {
+        l = '>';
+      }
+    }
+    if (keycode0 == 51) {
+      if (uppercase) {
+        l = ':';
+      } else {
+        l = ';';
+      }
+    }
+    if (keycode0 == 47) {
+      if (uppercase) {
+        l = '{';
+      } else {
+        l = '[';
+      }
+    }
+    if (keycode0 == 48) {
+      if (uppercase) {
+        l = '}';
+      } else {
+        l = ']';
+      }
+    }
+    if (keycode0 == 31) {
+      if (uppercase) {
+        l = '@';
+      } 
+    }
+    if (keycode0 == 32) {
+      if (uppercase) {
+        l = '#';
+      }
+    }
+    if (keycode0 == 33) {
+      if (uppercase) {
+        l = '$';
+      }
+    }
+    if (keycode0 == 34) {
+      if (uppercase) {
+        l = '%';
+      }
+    }
+    if (keycode0 == 35) {
+      if (uppercase) {
+        l = '^';
+      }
+    }
+    if (keycode0 == 36) {
+      if (uppercase) {
+        l = '&';
+      }
+    }
+    if (keycode0 == 37) {
+      if (uppercase) {
+        l = '*';
+      }
+    }
+    if (keycode0 == 38) {
+      if (uppercase) { 
+        l = '(';
+      }
+    }
+    if (keycode0 == 39) {
+      if (uppercase) {
+        l = ')';
+      }
+    }
   }
   else {
     l = ' '; // Default to space for unhandled keycodes
