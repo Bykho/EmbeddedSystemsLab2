@@ -83,121 +83,60 @@ char ascii_convert(int modifiers, int keycode0) {
     }
   }
   // Handle some common special characters
-  else if (keycode0 >= 45 && keycode0 <= 56) {
-    if (uppercase) {
-      l = (char)(7 + keycode0); // Offset for shifted special characters
-    } else {
-      l = (char)(keycode0 - 9); // Offset for normal special characters
-    }
-    if (keycode0 == 46){
-      if (uppercase) {  
-        l = '+';
-      } else {
-        l = '=';
-      }
-    }
-    if (keycode0 == 45) {
-      if (uppercase) {
-        l = '_';
-      } else {
-        l = '-';
-      }
-    }
-    if (keycode0 == 49) {
-      if (uppercase) {
-        l = '|';
-      } else {
-        l = '\\';
-      }
-    }
-    if (keycode0 == 52) {
-      if (uppercase) {
-        l = '"';
-      } else {
-        l = '\'';
-      }
-    }
-    if (keycode0 == 54) {
-      if (uppercase) {
-        l = '<';
-      } else {
-        l = ',';
-      }
-    }
-    if (keycode0 == 55) {
-      if (uppercase) {
-        l = '>';
-      } else {
-        l = '.';
-      }
-    }
-    if (keycode0 == 51) {
-      if (uppercase) {
-        l = ':';
-      } else {
-        l = ';';
-      }
-    }
-    if (keycode0 == 47) {
-      if (uppercase) {
-        l = '{';
-      } else {
-        l = '[';
-      }
-    }
-    if (keycode0 == 48) {
-      if (uppercase) {
-        l = '}';
-      } else {
-        l = ']';
-      }
-    }
-    if (keycode0 == 31) {
-      if (uppercase) {
-        l = '@';
-        printf("l: %c\n", l);
-      } 
-    }
-    if (keycode0 == 32) {
-      if (uppercase) {
-        l = '#';
-      }
-    }
-    if (keycode0 == 33) {
-      if (uppercase) {
-        l = '$';
-      }
-    }
-    if (keycode0 == 34) {
-      if (uppercase) {
-        l = '%';
-      }
-    }
-    if (keycode0 == 35) {
-      if (uppercase) {
-        l = '^';
-      }
-    }
-    if (keycode0 == 36) {
-      if (uppercase) {
-        l = '&';
-      }
-    }
-    if (keycode0 == 37) {
-      if (uppercase) {
-        l = '*';
-      }
-    }
-    if (keycode0 == 38) {
-      if (uppercase) { 
-        l = '(';
-      }
-    }
-    if (keycode0 == 39) {
-      if (uppercase) {
-        l = ')';
-      }
-    }
+  else if (keycode0 == 46) {
+    l = uppercase ? '+' : '=';
+  }
+  else if (keycode0 == 45) {
+    l = uppercase ? '_' : '-';
+  }
+  else if (keycode0 == 49) {
+    l = uppercase ? '|' : '\\';
+  }
+  else if (keycode0 == 52) {
+    l = uppercase ? '"' : '\'';
+  }
+  else if (keycode0 == 54) {
+    l = uppercase ? '<' : ',';
+  }
+  else if (keycode0 == 55) {
+    l = uppercase ? '>' : '.';
+  }
+  else if (keycode0 == 51) {
+    l = uppercase ? ':' : ';';
+  }
+  else if (keycode0 == 47) {
+    l = uppercase ? '{' : '[';
+  }
+  else if (keycode0 == 48) {
+    l = uppercase ? '}' : ']';
+  }
+  else if (keycode0 == 31 && uppercase) {
+    l = '@';
+    printf("l: %c\n", l);
+  }
+  else if (keycode0 == 32 && uppercase) {
+    l = '#';
+  }
+  else if (keycode0 == 33 && uppercase) {
+    l = '$';
+  }
+  else if (keycode0 == 34 && uppercase) {
+    l = '%';
+  }
+  else if (keycode0 == 35 && uppercase) {
+    l = '^';
+  }
+  else if (keycode0 == 36 && uppercase) {
+    l = '&';
+  }
+  else if (keycode0 == 37 && uppercase) {
+    l = '*';
+  }
+  else if (keycode0 == 38 && uppercase) {
+    l = '(';
+  }
+  else if (keycode0 == 39 && uppercase) {
+    l = ')';
   }
   else {
     l = ' '; // Default to space for unhandled keycodes
