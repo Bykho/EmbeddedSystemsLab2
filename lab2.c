@@ -225,6 +225,9 @@ int main()
         msg_len = 0;  // Reset message length
         memset(textBuffer, 0, sizeof(textBuffer));
       }
+      else if (msg_len == TEXT_ROWS * TOTAL_COLS) {
+        continue;
+      }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
