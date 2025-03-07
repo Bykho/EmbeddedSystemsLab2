@@ -92,11 +92,12 @@ char ascii_convert(int modifiers, int keycode0) {
     } else {
       l = (char)(keycode0 - 9); // Offset for normal special characters
     }
-    if (keycode0 == 46 && uppercase) {
-      l = '=';
-    }
-    if (keycode0 == 46 && !uppercase) {
-      l = '+';
+    if (keycode0 == 46){
+      if (uppercase) {  
+        l = '=';
+      } else {
+        l = '+';
+      }
     }
   }
   else {
