@@ -229,6 +229,8 @@ int main()
                 currentCol = TOTAL_COLS - 1;
             }
         }
+        fbputchar(tmp, prevRow, prevCol);
+        tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
       } 
       else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
       { 
@@ -243,6 +245,8 @@ int main()
                 currentCol++;
             }
         }
+        fbputchar(tmp, prevRow, prevCol);
+        tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
       }
       else if (packet.keycode[0] == 0x2a && currentCol > 0) // Backspace pressed
       {
@@ -271,6 +275,8 @@ int main()
             fbputchar(' ', lastRow, lastCol);
             
             msg_len--; // Decrease message length
+            fbputchar(tmp, prevRow, prevCol);
+            tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
         }
       }
       else // Normal text character inputted
@@ -306,8 +312,7 @@ int main()
             currentCol = newAbsPos % TOTAL_COLS;
         }
       } 
-      fbputchar(tmp, prevRow, prevCol);
-      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
+      ////BACK WHERE TEMP EAS
       fbputchar('_', currentRow, currentCol);
 
 
