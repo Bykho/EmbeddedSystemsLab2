@@ -229,11 +229,10 @@ int main()
                 currentCol = TOTAL_COLS - 1;
             }
         }
-        if (currentAbsPos != msg_len){
+        if (currentAbsPos != msg_len) {
           fbputchar(tmp, prevRow, prevCol);
           tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
         }
-      }
       } 
       else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
       { 
