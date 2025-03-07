@@ -178,7 +178,8 @@ int main()
 
   struct usb_keyboard_packet packet;
   int transferred;
-  // char keystate[12];
+  char keystate[8];
+  char prevkeystate[8];
   if ((err = fbopen()) != 0) {
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
@@ -240,6 +241,10 @@ int main()
   int prevCol, currentCol = 0;
   char tmp;
   int msg_len = 0; 
+  int prevkeycode0; 
+  int prevkeycode1;
+  int prevmodifier;
+  int newkey;
 
   // Define cursor by column and row.
   // Functions: delete, cursor left, cursor right.
@@ -261,14 +266,21 @@ int main()
 			      &transferred, 0);
     if (transferred == sizeof(packet)) 
     {
-      // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-	    //   packet.keycode[1]); // we don't need this, but figure it out maybe.
+      sprintf(keystate, "%02x %02x", packet.keycode[0], packet.keycode[1]); // we don't need this, but figure it out maybe.
       printf("keystate:modifiers: %02x keycode[0]: %02x keycode[1]: %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      if (packet.keycode[0] == 0) 
+
+      if(prevkeycode0 == packet.keycode[0] && prevmodifier == packet.modifiers) {
+        newkey = packet.keycode[1]; // then the second key changed. 
+      } else {
+        newkey = packet.keycode[0];
+      }
+
+      
+      if (newkey == 0) 
       { // If junk. 
         continue;
       }
-      if (packet.keycode[0] == 0x28) // If '/n', send message!
+      if (newkey == 0x28) // If '/n', send message!
       { 
         if (write(sockfd, (char *)textBuffer, TOTAL_COLS*TEXT_ROWS) < 0) {
           fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
@@ -280,7 +292,7 @@ int main()
         msg_len = 0;
         memset(textBuffer, 0, sizeof(textBuffer));
       }
-      else if (packet.keycode[0] == 0x50) // Left arrow key pressed
+      else if (newkey == 0x50) // Left arrow key pressed
       { 
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
@@ -304,7 +316,7 @@ int main()
         }
         fbputchar(' ', final_row , msg_len % TOTAL_COLS);
       } 
-      else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
+      else if (newkey == 0x4f) // Right arrow key pressed
       { 
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
@@ -319,7 +331,7 @@ int main()
         fbputchar(tmp, prevRow, prevCol);
         tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
       }
-      else if (packet.keycode[0] == 0x2a) // Backspace pressed
+      else if (newkey == 0x2a) // Backspace pressed
       {
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol; // absolute positon of cursor
         
@@ -370,7 +382,7 @@ int main()
           continue;
         }
         
-        char l = ascii_convert(packet.modifiers, packet.keycode[0]);
+        char l = ascii_convert(packet.modifiers, newkey);
         
         // If cursor is in the middle of text, shift everything right
         // Calculate absolute position in buffer based on current row and column
@@ -418,7 +430,7 @@ int main()
       //fbputs(&l, currentRow, currentCol++);
 
 
-      if (packet.keycode[0] == 0x29) { /* ESC pressed? */
+      if (newkey == 0x29) { /* ESC pressed? */
 	      break;
       }
     }
