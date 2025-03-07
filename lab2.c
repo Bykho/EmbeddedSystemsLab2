@@ -361,8 +361,12 @@ int main()
             msg_len--; // Decrease message length
             if (currentAbsPos < msg_len) {
                 fbputchar(tmp, prevRow, prevCol);
+                tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
+            } else {
+                // If we're at the end of text after backspacing, ensure we display a space
+                fbputchar(' ', currentRow, currentCol);
+                tmp = ' ';
             }
-            tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
         }
       }
       else // Normal text character inputted
