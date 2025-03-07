@@ -265,14 +265,16 @@ int main()
     if (transferred == sizeof(packet)) 
     {
       sprintf(keystate, "%02x %02x", packet.keycode[0], packet.keycode[1]); // we don't need this, but figure it out maybe.
-      printf("keystate:modifiers: %02x keycode[0]: %02x keycode[1]: %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
-
+      printf("keystate.modifiers: %02x keycode[0]: %02x keycode[1]: %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      
       if(prevkeycode0 == packet.keycode[0] && prevmodifier == packet.modifiers) {
         newkey = packet.keycode[1]; // then the second key changed. 
       } else {
         newkey = packet.keycode[0];
       }
-
+      // Save for next time. 
+      prevkeycode0 = newkey;
+      prevmodifier = packet.modifiers; 
       
       if (newkey == 0) 
       { // If junk. 
@@ -375,7 +377,7 @@ int main()
       }
       else // Normal text character inputted
       { 
-        printf("beginning of normal. msg_len: %d, currentCol: %d, tmp: %c\n", msg_len, currentCol, tmp);
+        //printf("beginning of normal. msg_len: %d, currentCol: %d, tmp: %c\n", msg_len, currentCol, tmp);
         if (msg_len == TEXT_ROWS * TOTAL_COLS - 1) {
           continue;
         }
@@ -402,7 +404,7 @@ int main()
         
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputchar(l, currentRow, currentCol);
-        printf("middle of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
+        //printf("middle of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
         
         // Update position and length
         msg_len++;
@@ -411,7 +413,7 @@ int main()
             currentRow = (newAbsPos / TOTAL_COLS) + SEPARATOR_ROW + 1;
             currentCol = newAbsPos % TOTAL_COLS;
         }
-        printf("end of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
+        //printf("end of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
       } 
       fbputchar('_', currentRow, currentCol);
 
