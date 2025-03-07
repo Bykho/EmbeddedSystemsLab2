@@ -364,7 +364,7 @@ int main()
       }
       else // Normal text character inputted
       { 
-        printf("beginning of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
+        printf("beginning of normal. msg_len: %d, currentCol: %d, tmp: %c\n", msg_len, currentCol, tmp);
         if (msg_len == TEXT_ROWS * TOTAL_COLS - 1) {
           continue;
         }
@@ -400,6 +400,7 @@ int main()
             currentRow = (newAbsPos / TOTAL_COLS) + SEPARATOR_ROW + 1;
             currentCol = newAbsPos % TOTAL_COLS;
         }
+        printf("end of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
       } 
       fbputchar('_', currentRow, currentCol);
 
