@@ -453,53 +453,57 @@ int main()
 
 void *network_thread_f(void *ignored)
 {
-  char recvBuf[BUFFER_SIZE];
-  int n;
-  //Current line should do something like 
-  //allow us to choose where the messages get written to.
-  int current_line = 8;
+    char recvBuf[BUFFER_SIZE];
+    int n;
+    int current_line = 8;
+    int max_display_lines = SEPARATOR_ROW - 8; // Available lines between start (8) and separator
 
-  //IN THIS WHILE LOOP WE ARE RECIEVING DATA
-  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
-    //check if were at the bottom, is yes clear the whole recieved text
-    if(current_line > SEPARATOR_ROW - 1) {
-      current_line = 8;
-      for(int i = 8; i < SEPARATOR_ROW; i++) {
-        for(int j = 0; j < TOTAL_COLS; j++) {
-          fbputs(" ", i, j);
+    while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
+        // If we're about to hit the separator, clear the display area and reset
+        if (current_line >= SEPARATOR_ROW - 1) {
+            current_line = 8;
+            for (int i = 8; i < SEPARATOR_ROW; i++) {
+                for (int j = 0; j < TOTAL_COLS; j++) {
+                    fbputs(" ", i, j);
+                }
+            }
         }
-      }
-    }
 
-    recvBuf[n] = '\0';
+        recvBuf[n] = '\0';
+        char *token = strtok(recvBuf, "\n");
+        
+        while (token != NULL) {
+            int line_length = strlen(token);
+            
+            // Calculate how many lines this text will need
+            int needed_lines = (line_length + TOTAL_COLS - 1) / TOTAL_COLS;
+            
+            // If this text would push us past the separator, reset to top
+            if (current_line + needed_lines >= SEPARATOR_ROW) {
+                current_line = 8;
+                for (int i = 8; i < SEPARATOR_ROW; i++) {
+                    for (int j = 0; j < TOTAL_COLS; j++) {
+                        fbputs(" ", i, j);
+                    }
+                }
+            }
 
-    // Initialize line_length to 0 and tokenize the received buffer by newline characters so that we go down by lines if we have that
-    int line_length = 0;
-    char *token = strtok(recvBuf, "\n");
-    while (token != NULL) {
-      // Calculate the length of the current line (which is the token)
-      line_length = strlen(token);
-      // If the line is longer than the total columns, wrap it so we dont go passed the right barrier of the screen
-      if (line_length > TOTAL_COLS) {
-        for (int i = 0; i < line_length; i += TOTAL_COLS) {
-          char line[TOTAL_COLS + 1];
-          // Copy a chunk of the line into a temporary buffer
-          strncpy(line, token + i, TOTAL_COLS);
-          line[TOTAL_COLS] = '\0';
-          // Print and display the wrapped line
-          printf("%s\n", line);
-          fbputs(line, current_line++, 0);
+            // Now safely display the text
+            if (line_length > TOTAL_COLS) {
+                for (int i = 0; i < line_length; i += TOTAL_COLS) {
+                    char line[TOTAL_COLS + 1];
+                    strncpy(line, token + i, TOTAL_COLS);
+                    line[TOTAL_COLS] = '\0';
+                    fbputs(line, current_line++, 0);
+                }
+            } else {
+                fbputs(token, current_line++, 0);
+            }
+            
+            token = strtok(NULL, "\n");
         }
-      } else {
-        // If the line is not too long, just go ahead and print it direct
-        printf("%s\n", token);
-        fbputs(token, current_line++, 0);
-      }
-      // Move to the next line
-      token = strtok(NULL, "\n");
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 
