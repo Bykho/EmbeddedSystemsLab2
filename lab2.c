@@ -314,9 +314,7 @@ int main()
             currentCol = newAbsPos % TOTAL_COLS;
         }
       } 
-      if (currentAbsPos != msg_len) {
       fbputchar('_', currentRow, currentCol);
-      }      
 
 
 
