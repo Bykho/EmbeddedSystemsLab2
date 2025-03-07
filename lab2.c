@@ -94,11 +94,33 @@ char ascii_convert(int modifiers, int keycode0) {
     }
     if (keycode0 == 46){
       if (uppercase) {  
-        l = '=';
-      } else {
         l = '+';
+      } else {
+        l = '=';
       }
     }
+    if (keycode0 == 45) {
+      if (uppercase) {
+        l = '_';
+      } else {
+        l = '-';
+      }
+    }
+    if (keycode0 == 49) {
+      if (uppercase) {
+        l = '|';
+      } else {
+        l = '\\';
+      }
+    }
+    if (keycode0 == 52) {
+      if (uppercase) {
+        l = '"';
+      } else {
+        l = '\'';
+      }
+    }
+    //if (keycode0 == )
   }
   else {
     l = ' '; // Default to space for unhandled keycodes
