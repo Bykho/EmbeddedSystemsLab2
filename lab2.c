@@ -363,7 +363,9 @@ int main()
             fbputchar(' ', lastRow, lastCol);
             
             msg_len--; // Decrease message length
-            fbputchar(tmp, prevRow, prevCol);
+            if (currentAbsPos < msg_len) {
+                fbputchar(tmp, prevRow, prevCol);
+            }
             tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
         }
       }
