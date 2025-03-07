@@ -259,7 +259,6 @@ int main()
     libusb_interrupt_transfer(keyboard, endpoint_address,
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
-    
     if (transferred == sizeof(packet)) 
     {
       // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
@@ -279,9 +278,6 @@ int main()
         currentRow = SEPARATOR_ROW + 1;
         msg_len = 0;  // Reset message length
         memset(textBuffer, 0, sizeof(textBuffer));
-      }
-      else if (msg_len == TEXT_ROWS * TOTAL_COLS) {
-        continue;
       }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
@@ -371,6 +367,10 @@ int main()
       }
       else // Normal text character inputted
       { 
+        if (msg_len == TEXT_ROWS * TOTAL_COLS) {
+          continue;
+        }
+        
         char l = ascii_convert(packet.modifiers, packet.keycode[0]);
         
         // If cursor is in the middle of text, shift everything right
