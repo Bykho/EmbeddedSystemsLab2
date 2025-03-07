@@ -330,6 +330,7 @@ int main()
         
         // Only delete if we're not at the start of text and have content to delete
         if (currentAbsPos > 0 && msg_len > 0) {
+            printf("GOT HEREcurrentAbsPos: %d\n", currentAbsPos);
             // If we're at the end of text, just clear current position
             if (currentAbsPos == msg_len) {
                 fbputchar(' ', currentRow, currentCol);
