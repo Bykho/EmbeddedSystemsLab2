@@ -59,7 +59,7 @@ char ascii_convert(int modifiers, int keycode0) {
   printf("ASCII_CONVERT:ascii_convert called with modifiers: %d, keycode0: %d\n", modifiers, keycode0);
   int uppercase = 0;
   
-  if (modifiers == 2) {
+  if (modifiers == 2 || modifiers == 32) {
     uppercase = 1;
   } else {
     uppercase = 0;
