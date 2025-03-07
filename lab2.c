@@ -233,6 +233,13 @@ int main()
           fbputchar(tmp, prevRow, prevCol);
           tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
         }
+        int final_row;
+        if (msg_len > 64) {
+          final_row = SEPARATOR_ROW + 2;
+        } else {
+          final_row = SEPARATOR_ROW + 1;
+        }
+        fbputchar(' ', final_row , msg_len % TOTAL_COLS);
       } 
       else if (packet.keycode[0] == 0x4f) // Right arrow key pressed
       { 
