@@ -205,6 +205,7 @@ char ascii_convert(int modifiers, int keycode0) {
     l = ' '; // Default to space for unhandled keycodes
   }
   printf("Generated character ASCII value: %d\n", (int)l);
+  printf("l: %c\n", l);
   return l;
 }
 
