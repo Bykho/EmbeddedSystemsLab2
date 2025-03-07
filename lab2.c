@@ -110,6 +110,9 @@ char ascii_convert(int modifiers, int keycode0) {
   else if (keycode0 == 48) {
     l = uppercase ? '}' : ']';
   }
+  else if (keycode0 == 30 && uppercase) {
+    l = '!';
+  }
   else if (keycode0 == 31 && uppercase) {
     l = '@';
     printf("l: %c\n", l);
@@ -137,6 +140,12 @@ char ascii_convert(int modifiers, int keycode0) {
   }
   else if (keycode0 == 39 && uppercase) {
     l = ')';
+  }
+  else if (keycode0 == 56) {
+    l = '/';
+    if (uppercase) {
+      l = '?';
+    }
   }
   else {
     l = ' '; // Default to space for unhandled keycodes
