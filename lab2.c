@@ -110,6 +110,13 @@ char ascii_convert(int modifiers, int keycode0) {
   else if (keycode0 == 48) {
     l = uppercase ? '}' : ']';
   }
+  else if (keycode0 == 53) {
+    if (uppercase) {
+      l = '~';
+    } else {
+      l = '`';
+    }
+  }
   else if (keycode0 == 30 && uppercase) {
     l = '!';
   }
