@@ -322,10 +322,10 @@ int main()
       {
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol; // absolute positon of cursor
         
-        if (currentAbsPos > 0 && msg_len > 0) { // yes this would be true
-            printf("beginning of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
+        if (currentAbsPos > 0 && msg_len > 0) {
+            //printf("beginning of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
             if (currentAbsPos == msg_len) {
-                fbputchar(' ', currentRow, currentCol); // this does not seem to be working. 
+                fbputchar(' ', currentRow, currentCol); 
             }
             
             if (currentCol > 0) {
@@ -359,11 +359,12 @@ int main()
                 fbputchar(' ', currentRow, currentCol);
                 tmp = ' ';
             }
-            printf("end of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
+            //printf("end of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
         }
       }
       else // Normal text character inputted
       { 
+        printf("beginning of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
         if (msg_len == TEXT_ROWS * TOTAL_COLS - 1) {
           continue;
         }
@@ -390,6 +391,7 @@ int main()
         
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputchar(l, currentRow, currentCol);
+        printf("middle of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
         
         // Update position and length
         msg_len++;
