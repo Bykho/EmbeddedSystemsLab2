@@ -456,7 +456,7 @@ void *network_thread_f(void *ignored)
     char recvBuf[BUFFER_SIZE];
     int n;
     int current_line = 8;
-    int max_display_lines = SEPARATOR_ROW - 8; // Available lines between start (8) and separator
+    //int max_display_lines = SEPARATOR_ROW - 8; // Available lines between start (8) and separator
 
     while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
         // If we're about to hit the separator, clear the display area and reset
