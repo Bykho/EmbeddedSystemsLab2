@@ -68,6 +68,9 @@ char ascii_convert(int modifiers, int keycode0) {
   char l;
   // Numbers
   if (keycode0 >= 30 && keycode0 <= 39) {
+    if(uppercase) {
+      l = (char)(3 + keycode0);
+    }
     if (keycode0 == 39) { // Special case for '0'
       l = '0'; // ASCII 48
     } else {
@@ -88,6 +91,12 @@ char ascii_convert(int modifiers, int keycode0) {
       l = (char)(7 + keycode0); // Offset for shifted special characters
     } else {
       l = (char)(keycode0 - 9); // Offset for normal special characters
+    }
+    if (keycode0 == 46 && lowercase) {
+      l = '=';
+    }
+    if (keycode0 == 46 && uppercase) {
+      l = '+';
     }
   }
   else {
