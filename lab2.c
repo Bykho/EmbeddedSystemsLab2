@@ -238,7 +238,7 @@ int main()
   int cols = TOTAL_COLS;
   int prevRow, currentRow = SEPARATOR_ROW + 1;
   int prevCol, currentCol = 0;
-  char tmp;
+  char tmp = ' ';
   int msg_len = 0; 
 
   // Define cursor by column and row.
