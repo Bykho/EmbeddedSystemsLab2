@@ -364,7 +364,7 @@ int main()
       }
       else // Normal text character inputted
       { 
-        if (msg_len == TEXT_ROWS * TOTAL_COLS) {
+        if (msg_len == TEXT_ROWS * TOTAL_COLS - 1) {
           continue;
         }
         
