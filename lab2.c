@@ -67,7 +67,7 @@ char ascii_convert(int modifiers, int keycode0) {
   
   char l;
   // Numbers
-  if (keycode0 >= 30 && keycode0 <= 39) {
+  if (keycode0 >= 30 && keycode0 <= 39 && !uppercase) {
     if (keycode0 == 39) { // Special case for '0'
       l = '0'; // ASCII 48
     } else {
