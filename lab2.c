@@ -263,6 +263,7 @@ int main()
     {
       // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	    //   packet.keycode[1]); // we don't need this, but figure it out maybe.
+      printf("keystate:modifiers: %02x keycode[0]: %02x keycode[1]: %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
       if (packet.keycode[0] == 0) 
       { // If junk. 
         continue;
@@ -485,3 +486,8 @@ void *network_thread_f(void *ignored)
   }
   return NULL;
 }
+
+
+// holding down the 8 --1 move
+// press down the k -- 1 move, registers as 8
+// release the k -- 1 move, registers as 8
