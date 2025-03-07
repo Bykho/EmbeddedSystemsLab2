@@ -274,7 +274,7 @@ int main()
         printf("USING FIRST KEY");
       }
       // Save for next time. 
-      prevkeycode0 = newkey;
+      prevkeycode0 = packet.keycode[0];
       prevmodifier = packet.modifiers; 
       printf("after changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
 
