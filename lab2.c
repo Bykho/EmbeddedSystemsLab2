@@ -122,16 +122,16 @@ char ascii_convert(int modifiers, int keycode0) {
     }
     if (keycode0 == 54) {
       if (uppercase) {
-        l = ',';
-      } else {
         l = '<';
+      } else {
+        l = ',';
       }
     }
     if (keycode0 == 55) {
       if (uppercase) {
-        l = '.';
-      } else {
         l = '>';
+      } else {
+        l = '.';
       }
     }
     if (keycode0 == 51) {
@@ -206,6 +206,7 @@ char ascii_convert(int modifiers, int keycode0) {
   }
   printf("Generated character ASCII value: %d\n", (int)l);
   printf("l: %c\n", l);
+  printf("uppercase: %d\n", uppercase);
   return l;
 }
 
