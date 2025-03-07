@@ -56,7 +56,6 @@ void draw_separator() {
 }
 
 char ascii_convert(int modifiers, int keycode0) {
-  printf("ASCII_CONVERT:ascii_convert called with modifiers: %d, keycode0: %d\n", modifiers, keycode0);
   int uppercase = 0;
   
   if (modifiers == 2 || modifiers == 32) {
@@ -157,7 +156,6 @@ char ascii_convert(int modifiers, int keycode0) {
   else {
     l = ' '; // Default to space for unhandled keycodes
   }
-  printf("Generated character ASCII value: %d\n", (int)l);
   return l;
 }
 
@@ -265,16 +263,21 @@ int main()
     if (transferred == sizeof(packet)) 
     {
       sprintf(keystate, "%02x %02x", packet.keycode[0], packet.keycode[1]); // we don't need this, but figure it out maybe.
-      printf("keystate.modifiers: %02x keycode[0]: %02x keycode[1]: %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      printf("keystate.modifiers: %02x keycode[0]: %02x keycode[1]: %02x\n", packet.modifiers, packet.keycode[0], packet.keycode[1]);
+      printf("before changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
       
       if(prevkeycode0 == packet.keycode[0] && prevmodifier == packet.modifiers) {
         newkey = packet.keycode[1]; // then the second key changed. 
+        printf("USING SECOND KEY");
       } else {
         newkey = packet.keycode[0];
+        printf("USING FIRST KEY");
       }
       // Save for next time. 
       prevkeycode0 = newkey;
       prevmodifier = packet.modifiers; 
+      printf("after changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
+
       
       if (newkey == 0) 
       { // If junk. 
@@ -420,7 +423,7 @@ int main()
 
 
       // FOR DEBUGGING:
-      printf("about to print textBuffer: \n");
+      printf("TextBuffer: ");
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
           printf("%c", textBuffer[i][j]);
