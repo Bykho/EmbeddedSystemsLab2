@@ -266,7 +266,7 @@ int main()
       printf("keystate.modifiers: %02x keycode[0]: %02x keycode[1]: %02x\n", packet.modifiers, packet.keycode[0], packet.keycode[1]);
       printf("before changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
       
-      if(prevkeycode0 == packet.keycode[0] && prevmodifier == packet.modifiers) {
+      if(prevkeycode0 == packet.keycode[0]) { // && prevmodifier == packet.modifiers
         newkey = packet.keycode[1]; // then the second key changed. 
         printf("USING SECOND KEY");
       } else {
