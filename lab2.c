@@ -158,6 +158,7 @@ char ascii_convert(int modifiers, int keycode0) {
     if (keycode0 == 31) {
       if (uppercase) {
         l = '@';
+        printf("l: %c\n", l);
       } 
     }
     if (keycode0 == 32) {
