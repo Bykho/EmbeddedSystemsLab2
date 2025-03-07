@@ -200,9 +200,6 @@ int main()
     {
       // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	    //   packet.keycode[1]); // we don't need this, but figure it out maybe.
-      if (msg_len == TEXT_ROWS * TOTAL_COLS) {
-        continue;
-      }
       if (packet.keycode[0] == 0) 
       { // If junk. 
         continue;
@@ -218,6 +215,9 @@ int main()
         currentRow = SEPARATOR_ROW + 1;
         msg_len = 0;  // Reset message length
         memset(textBuffer, 0, sizeof(textBuffer));
+      }
+      else if (msg_len == TEXT_ROWS * TOTAL_COLS) {
+        continue;
       }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
