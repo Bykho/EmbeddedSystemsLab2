@@ -200,6 +200,9 @@ int main()
     {
       // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
 	    //   packet.keycode[1]); // we don't need this, but figure it out maybe.
+      if (msg_len == TEXT_ROWS * TOTAL_COLS) {
+        continue;
+      }
       if (packet.keycode[0] == 0) 
       { // If junk. 
         continue;
