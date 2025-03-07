@@ -241,9 +241,8 @@ int main()
   int prevCol, currentCol = 0;
   char tmp;
   int msg_len = 0; 
-  int prevkeycode0; 
-  int prevkeycode1;
-  int prevmodifier;
+  int prevkeycode0 = 0; 
+  int prevmodifier = 0;
   int newkey;
 
   // Define cursor by column and row.
