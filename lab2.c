@@ -320,12 +320,12 @@ int main()
       }
       else if (packet.keycode[0] == 0x2a) // Backspace pressed
       {
-        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
+        int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol; // absolute positon of cursor
         
-        if (currentAbsPos > 0 && msg_len > 0) {
-            printf("GOT HEREcurrentAbsPos: %d\n", currentAbsPos);
+        if (currentAbsPos > 0 && msg_len > 0) { // yes this would be true
+            printf("beginning of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
             if (currentAbsPos == msg_len) {
-                fbputchar(' ', currentRow, currentCol);
+                fbputchar(' ', currentRow, currentCol); // this does not seem to be working. 
             }
             
             if (currentCol > 0) {
@@ -359,6 +359,7 @@ int main()
                 fbputchar(' ', currentRow, currentCol);
                 tmp = ' ';
             }
+            printf("end of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
         }
       }
       else // Normal text character inputted
