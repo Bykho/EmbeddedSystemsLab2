@@ -184,7 +184,8 @@ int main()
   /* Look for and handle keypresses */
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
-    tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol]; 
+    tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol];
+    printf("tmp: %c\n", tmp);
     prevRow = currentRow;
     prevCol = currentCol;
 
@@ -305,10 +306,9 @@ int main()
             currentCol = newAbsPos % TOTAL_COLS;
         }
       } 
-      // Following the cursor change, reset the character that the cursor briefly covered
-      fbputchar(tmp, prevRow, prevCol);  // Restore the previous character
-      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];  // Save the character at new position
-      fbputchar('_', currentRow, currentCol);  // Show cursor at new position
+      fbputchar(tmp, prevRow, prevCol);
+      tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
+      fbputchar('_', currentRow, currentCol);
 
 
 
