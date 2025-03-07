@@ -276,14 +276,13 @@ int main()
         fbclearbottom();
         currentCol = 0;
         currentRow = SEPARATOR_ROW + 1;
-        msg_len = 0;  // Reset message length
+        msg_len = 0;
         memset(textBuffer, 0, sizeof(textBuffer));
       }
       else if (packet.keycode[0] == 0x50) // Left arrow key pressed
       { 
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
-        // Move left if we're not at the start of text
         if (currentAbsPos > 0) {
             if (currentCol > 0) {
                 currentCol--;
@@ -308,7 +307,6 @@ int main()
       { 
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
-        // Only move right if we haven't reached the end of the message
         if (currentAbsPos < msg_len) {
             if (currentCol >= TOTAL_COLS - 1) {
                 currentRow++;
@@ -324,24 +322,20 @@ int main()
       {
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
-        // Only delete if we're not at the start of text and have content to delete
         if (currentAbsPos > 0 && msg_len > 0) {
             printf("GOT HEREcurrentAbsPos: %d\n", currentAbsPos);
-            // If we're at the end of text, just clear current position
             if (currentAbsPos == msg_len) {
                 fbputchar(' ', currentRow, currentCol);
             }
             
-            // Handle cursor movement when backspacing
             if (currentCol > 0) {
-                currentCol--; // Move cursor left if not at start of line
+                currentCol--;
             } else if (currentRow > SEPARATOR_ROW + 1) {
-                currentRow--; // Move up a row
-                currentCol = TOTAL_COLS - 1; // Move to end of previous row
+                currentRow--;
+                currentCol = TOTAL_COLS - 1;
             }
             currentAbsPos--;
             
-            // Shift all characters to the right of cursor one position left
             for (int i = currentAbsPos; i < msg_len - 1; i++) {
                 int row = (i / TOTAL_COLS) + SEPARATOR_ROW + 1;
                 int col = i % TOTAL_COLS;
@@ -352,18 +346,16 @@ int main()
                 fbputchar(textBuffer[row - SEPARATOR_ROW - 1][col], row, col);
             }
             
-            // Clear the last character position
             int lastRow = ((msg_len-1) / TOTAL_COLS) + SEPARATOR_ROW + 1;
             int lastCol = (msg_len-1) % TOTAL_COLS;
             textBuffer[lastRow - SEPARATOR_ROW - 1][lastCol] = ' ';
             fbputchar(' ', lastRow, lastCol);
             
-            msg_len--; // Decrease message length
+            msg_len--;
             if (currentAbsPos < msg_len) {
                 fbputchar(tmp, prevRow, prevCol);
                 tmp = textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol];
             } else {
-                // If we're at the end of text after backspacing, ensure we display a space
                 fbputchar(' ', currentRow, currentCol);
                 tmp = ' ';
             }
