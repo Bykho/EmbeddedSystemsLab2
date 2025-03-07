@@ -238,7 +238,7 @@ int main()
   int cols = TOTAL_COLS;
   int prevRow, currentRow = SEPARATOR_ROW + 1;
   int prevCol, currentCol = 0;
-  char tmp = ' ';
+  char tmp;
   int msg_len = 0; 
 
   // Define cursor by column and row.
@@ -328,8 +328,13 @@ int main()
       {
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol;
         
-        // Only delete if we're not at the start of the line and have content to delete
-        if (currentCol > 0 && msg_len > 0) {
+        // Only delete if we're not at the start of text and have content to delete
+        if (currentAbsPos > 0 && msg_len > 0) {
+            // If we're at the end of text, just clear current position
+            if (currentAbsPos == msg_len) {
+                fbputchar(' ', currentRow, currentCol);
+            }
+            
             currentCol--; // Move cursor left first
             currentAbsPos--;
             
