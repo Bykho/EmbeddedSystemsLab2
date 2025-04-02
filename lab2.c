@@ -2,7 +2,9 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI: Please Changeto Yourname (pcy2301)
+ * Name/UNI: 
+ * Lourdes Sanchez Medina (als2408)
+ * Nico Bykhovsky-Gonzalez (nb3227)
  */
 #include "fbputchar.h"
 #include <stdio.h>
@@ -159,15 +161,6 @@ char ascii_convert(int modifiers, int keycode0) {
   return l;
 }
 
-// int send_buffer_data(char ** buffer, int cols, int rows, int size)
-// {
-//   if (write(sockfd, (char *)buffer, size) < 0) {
-//     fprintf(stderr, "Error insend_buffer_data: %s\n", strerror(errno));
-//     return -1;
-//   }
-//   return 0;
-// }
-
 int main()
 {
   int err, col;
@@ -226,11 +219,6 @@ int main()
   /* Start the network thread */
   pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
-
-  //TODO
-  // 2d array to write in filled with " ". as user types we go to the next column untill we wrap around.
-  // On enter send array to server.
-
   char textBuffer[TEXT_ROWS][TOTAL_COLS] = {{'\0'}};
   int rows = TEXT_ROWS;
   int cols = TOTAL_COLS;
@@ -250,7 +238,6 @@ int main()
   for (;;) {
     // Save the character (+ its location) that you're about to cover with the cursor.
     tmp = textBuffer[currentRow- SEPARATOR_ROW - 1][currentCol];
-    printf("tmp: %c\n", tmp);
     prevRow = currentRow;
     prevCol = currentCol;
 
@@ -263,21 +250,15 @@ int main()
     if (transferred == sizeof(packet)) 
     {
       sprintf(keystate, "%02x %02x", packet.keycode[0], packet.keycode[1]); // we don't need this, but figure it out maybe.
-      printf("keystate.modifiers: %02x keycode[0]: %02x keycode[1]: %02x\n", packet.modifiers, packet.keycode[0], packet.keycode[1]);
-      printf("before changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
       
       if(prevkeycode0 == packet.keycode[0]) { // && prevmodifier == packet.modifiers
         newkey = packet.keycode[1]; // then the second key changed. 
-        printf("USING SECOND KEY");
       } else {
         newkey = packet.keycode[0];
-        printf("USING FIRST KEY");
       }
       // Save for next time. 
       prevkeycode0 = packet.keycode[0];
       prevmodifier = packet.modifiers; 
-      printf("after changing: prevModifier: %d prevkeycode0: %d\n", prevmodifier, prevkeycode0);
-
       
       if (newkey == 0) 
       { // If junk. 
@@ -339,7 +320,6 @@ int main()
         int currentAbsPos = ((currentRow - SEPARATOR_ROW - 1) * TOTAL_COLS) + currentCol; // absolute positon of cursor
         
         if (currentAbsPos > 0 && msg_len > 0) {
-            //printf("beginning of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
             if (currentAbsPos == msg_len) {
                 fbputchar(' ', currentRow, currentCol); 
             }
@@ -375,12 +355,10 @@ int main()
                 fbputchar(' ', currentRow, currentCol);
                 tmp = ' ';
             }
-            //printf("end of backspace. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c\n", currentAbsPos, msg_len, currentCol, tmp);
         }
       }
       else // Normal text character inputted
       { 
-        //printf("beginning of normal. msg_len: %d, currentCol: %d, tmp: %c\n", msg_len, currentCol, tmp);
         if (msg_len == TEXT_ROWS * TOTAL_COLS - 1) {
           continue;
         }
@@ -407,7 +385,6 @@ int main()
         
         textBuffer[currentRow - SEPARATOR_ROW - 1][currentCol] = l;
         fbputchar(l, currentRow, currentCol);
-        //printf("middle of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
         
         // Update position and length
         msg_len++;
@@ -416,24 +393,19 @@ int main()
             currentRow = (newAbsPos / TOTAL_COLS) + SEPARATOR_ROW + 1;
             currentCol = newAbsPos % TOTAL_COLS;
         }
-        //printf("end of normal. current AbsPos: %d, msg_len: %d, currentCol: %d, tmp: %c, l: %c\n", currentAbsPos, msg_len, currentCol, tmp, l);
       } 
       fbputchar('_', currentRow, currentCol);
 
-
-
       // FOR DEBUGGING:
-      printf("TextBuffer: ");
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-          printf("%c", textBuffer[i][j]);
-        }
-        printf("\n");
-      }
-      //fbputs(&l, currentRow, currentCol++);
+      // printf("TextBuffer: ");
+      // for (int i = 0; i < rows; i++) {
+      //   for (int j = 0; j < cols; j++) {
+      //     printf("%c", textBuffer[i][j]);
+      //   }
+      //   printf("\n");
+      // }
 
-
-      if (newkey == 0x29) { /* ESC pressed? */
+      if (newkey == 0x29) {
 	      break;
       }
     }
@@ -448,15 +420,12 @@ int main()
   return 0;
 }
 
-//NICO PUSHED HERE
-//HERE IS WHERE WE WRITE THE CODE THAT SHOULD MANAGE INCOMING TRAFFIC AND DISPLAY IN TOP PORTION
 
 void *network_thread_f(void *ignored)
 {
     char recvBuf[BUFFER_SIZE];
     int n;
     int current_line = 8;
-    //int max_display_lines = SEPARATOR_ROW - 8; // Available lines between start (8) and separator
 
     while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) {
         // If we're about to hit the separator, clear the display area and reset
@@ -505,8 +474,3 @@ void *network_thread_f(void *ignored)
     }
     return NULL;
 }
-
-
-// holding down the 8 --1 move
-// press down the k -- 1 move, registers as 8
-// release the k -- 1 move, registers as 8
